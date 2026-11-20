@@ -1,0 +1,134 @@
+#notific-root {
+	font-size: 1rem;
+	background: none;
+	padding: 0;
+	position: fixed;
+	right: 375px;
+	bottom: 1%;
+	width: 0;
+	z-index: 9;
+	color: #555;
+}
+
+@-webkit-keyframes notific {
+	0% {
+		opacity: 0;
+		left: 900px;
+	}
+
+	100% {
+		opacity: 1;
+		left: 0;
+	}
+}
+
+@keyframes notific {
+	0% {
+		opacity: 0;
+		left: 900px;
+	}
+
+	100% {
+		opacity: 1;
+		left: 0;
+	}
+}
+
+#notific-root input {
+	display: none;
+}
+
+#notific-root input:checked+label {
+	display: block;
+	left: 2000px;
+	opacity: 0;
+	cursor: default;
+	-webkit-transition-duration: 0.2s;
+	transition-duration: 0.2s;
+	-webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#notific-root label {
+	position: relative;
+	width: 360px;
+	min-height: 80px;
+	opacity: 1;
+	left: 0;
+	display: block;
+	background-color: #fff;
+	padding-top: 0.1em;
+	margin-bottom: 1em;
+	cursor: pointer;
+	text-align: left;
+	-webkit-animation: notific 1s ease;
+	animation: notific 1s ease;
+	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.36);
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.36);
+}
+
+#notific-root label::after {
+	content: "×";
+	display: block;
+	position: absolute;
+	top: 0.4em;
+	right: 0.4em;
+	width: 0.8em;
+	height: 0.9em;
+	font-weight: bold;
+	font-size: larger;
+	line-height: 1em;
+	padding-left: 2px;
+	text-indent: 1px;
+}
+
+#notific-root label:hover::after {
+	background: #555;
+	color: #fff;
+	border-radius: 50%;
+}
+
+#notific-root label[for='notific-2'] {
+	-webkit-animation: notific 1.2s ease;
+	animation: notific 1.2s ease;
+}
+
+#notific-root label[for='notific-3'] {
+	-webkit-animation: notific 1.4s ease;
+	animation: notific 1.4s ease;
+}
+
+#notific-root label[for='notific-4'] {
+	-webkit-animation: notific 1.6s ease;
+	animation: notific 1.6s ease;
+}
+
+#notific-root [role="alert"] {
+	display: block;
+	padding: 0.5em;
+}
+
+#notific-root [role="alert"]::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+#notific-root picture {
+	float: left;
+	margin: 0.1em 0.8em 0.1em 0.5em;
+}
+
+#notific-root strong {
+	display: inline-block;
+	width: calc(100% - 1rem);
+	font-weight: normal;
+	font-size: large;
+	margin-bottom: 0.4em;
+}
+
+#notific-root small {
+	display: inline-block;
+	margin-top: 1em;
+	color: #aaa;
+}

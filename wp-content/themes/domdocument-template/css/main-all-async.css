@@ -1,0 +1,197 @@
+aside figure {
+  background: transparent;
+}
+
+aside figcaption {
+  margin: initial !important;
+}
+
+#youtube-canvas {
+  padding: initial !important;
+}
+
+.resize {
+  border-bottom: 1rem solid var(--color-bg);
+}
+
+.resizing .resize {
+  border-bottom: 1rem solid #eee;
+}
+
+.resizing .resize .★ {
+  border-color: var(--color);
+}
+
+.resizing .★ {
+  box-shadow: 1px 0 0 0 var(--color-secondary), -1px 0 0 0 var(--color-secondary);
+}
+
+.resize .★ {
+  padding-bottom: 0;
+  border-bottom: 1rem solid var(--color-bg);
+  margin-bottom: -1rem;
+  resize: horizontal;
+  overflow: hidden;
+}
+
+footer {
+  background-color: var(--color-footer-bg);
+}
+
+footer .★ {
+  background-color: var(--color-footer-bg);
+}
+
+footer .wp-block-column {
+  margin-left: 0 !important;
+  background: none;
+}
+
+@media (min-width: 768px) {
+  footer .wp-block-column {
+    margin-left: 1rem !important;
+  }
+}
+
+footer .wp-block-column:first-of-type {
+  margin-left: 0 !important;
+}
+
+.watermark {
+  font-weight: bold;
+  position: fixed;
+  bottom: -1rem;
+  right: 0;
+  display: block;
+  text-align: right;
+  font-size: 9rem;
+  width: var(--width-content);
+}
+
+#sponsors ul {
+  list-style-type: none;
+  padding-bottom: 1rem;
+}
+
+#sponsors li {
+  display: inline-block;
+  height: 6rem;
+  margin: 0.25rem;
+}
+
+#sponsors li:hover a img {
+  border-color: var(--color-primary);
+}
+
+#sponsors.large li {
+  height: 9rem;
+}
+
+#sponsors.full li {
+  height: auto;
+}
+
+#sponsors a {
+  display: inline;
+  width: 100%;
+}
+
+#sponsors img {
+  height: 100%;
+  border: 0.25rem solid var(--color-footer-bg);
+}
+
+label.switch {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  min-width: 40px;
+  height: 13.33333px;
+  margin: 6.66667px;
+}
+
+label.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  font-size: 0;
+}
+
+label.switch span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(99, 99, 99, 0.4);
+  box-shadow: 0 1px 1px 0 rgba(99, 99, 99, 0.4);
+  border-radius: 16px;
+}
+
+label.switch span:before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: -2px;
+  bottom: -2px;
+  background-color: #fff;
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+  -webkit-transition: background-color 0.3s, -webkit-transform 0.3s;
+  transition: background-color 0.3s, -webkit-transform 0.3s;
+  transition: transform 0.3s, background-color 0.3s;
+  transition: transform 0.3s, background-color 0.3s, -webkit-transform 0.3s;
+}
+
+label.switch strong {
+  position: absolute;
+  margin-left: 38px;
+  margin-top: -4px;
+  white-space: pre;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+label.switch input:focus+span:before {
+  -webkit-box-shadow: 0 0 0 5px rgba(99, 99, 99, 0.4);
+  box-shadow: 0 0 0 5px rgba(99, 99, 99, 0.4);
+}
+
+label.switch input:checked:focus+span:before {
+  -webkit-box-shadow: 0 0 0 5px rgba(0, 0, 255, 0.2);
+  box-shadow: 0 0 0 5px rgba(0, 0, 255, 0.2);
+}
+
+label.switch input:checked+span::before {
+  background-color: #1c74e9;
+}
+
+label.switch input:checked+span {
+  background-color: #8db9f4;
+}
+
+label.switch :checked+span:before {
+  -webkit-transform: translateX(24px);
+  transform: translateX(24px);
+}
+
+label.switch span:before {
+  border-radius: 50%;
+}
+
+a.edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--color-secondary);
+}
