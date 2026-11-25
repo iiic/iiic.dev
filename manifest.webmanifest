@@ -1,0 +1,19 @@
+{
+    "name": "wordpress",
+    "short_name": "wordpress",
+    "description": "",
+    "lang": "cs",
+    "dir": "ltr",
+    "start_url": "/",
+    "scope": "/",
+    "display": "browser",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
+        }
+    ]
+}

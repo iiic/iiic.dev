@@ -1,0 +1,4 @@
+/* StyleSwitch for WordPress: light style. Colors come from the theme (light-dark() or system colors). */
+:root {
+	color-scheme: light;
+}

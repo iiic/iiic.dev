@@ -1,0 +1,157 @@
+/* [2026-11-25] Vzhled → About template, sekce Návody (\FUNCTIONS\ADMIN_GUIDE ve functions.php, texty v admin-guides/).
+   Třídy: \CSS\CLASS_NAMES\ADMIN_GUIDE. Barvy z palety administrace WordPressu. Po změně přepočítat SRI
+   v \VARS\ADMIN_GUIDE::STYLESHEET_INTEGRITY a zvýšit verzi v \VARS\ADMIN_GUIDE::STYLESHEET (pravidlo 9). */
+
+.ddt-guides > .inside {
+	padding: 0 16px 8px;
+}
+.ddt-guides > .inside > h2 {
+	font-size: 1.4em;
+	margin: 1em 0 .5em;
+}
+
+/* jeden návod */
+.ddt-guide {
+	border-top: 1px solid #dcdcde;
+}
+.ddt-guide > summary {
+	cursor: pointer;
+	padding: 12px 0;
+}
+.ddt-guide > summary:hover .ddt-guide-title,
+.ddt-guide > summary:focus-visible .ddt-guide-title {
+	color: #2271b1;
+}
+.ddt-guide-title {
+	font-size: 1.2em;
+	font-weight: 600;
+}
+.ddt-guide-description {
+	display: block;
+	margin: 4px 0 0 1.1em;
+	color: #50575e;
+}
+.ddt-guide[open] > summary {
+	border-bottom: 1px solid #f0f0f1;
+}
+
+/* text návodu – kratší řádky se čtou lépe */
+.ddt-guide-body {
+	max-width: 52rem;
+	padding-bottom: 16px;
+	font-size: 14px;
+	line-height: 1.6;
+}
+.ddt-guide-body p {
+	font-size: inherit;
+	line-height: inherit;
+}
+.ddt-guide-body h3 {
+	font-size: 1.3em;
+	margin: 2.2em 0 .6em;
+	padding-top: 1em;
+	border-top: 1px solid #f0f0f1;
+	scroll-margin-top: 48px; /* odkaz z obsahu nesmí skončit pod horní lištou */
+}
+.ddt-guide-body h4 {
+	font-size: 1.05em;
+	margin: 1.6em 0 .4em;
+}
+.ddt-guide-body ul,
+.ddt-guide-body ol {
+	margin: .5em 0 1em 2em;
+}
+.ddt-guide-body ul {
+	list-style: disc; /* administrace odrážky jinak skrývá */
+}
+.ddt-guide-body li {
+	margin-bottom: .4em;
+}
+.ddt-guide-body li > ul {
+	margin-top: .4em;
+}
+
+/* příkazy */
+.ddt-guide-body pre {
+	margin: .5em 0 1em;
+	padding: 10px 14px;
+	overflow-x: auto;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #2271b1;
+	white-space: pre;
+}
+.ddt-guide-body pre code {
+	padding: 0;
+	background: none;
+	font-size: 13px;
+	line-height: 1.5;
+}
+.ddt-guide-body code {
+	overflow-wrap: anywhere; /* dlouhé adresy a otisky nesmí rozšířit stránku */
+}
+.ddt-guide-body kbd {
+	padding: 1px 6px;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	background: #fff;
+	box-shadow: 0 1px 0 #c3c4c7;
+	font-size: .9em;
+}
+
+/* odkaz na jiný web */
+.ddt-guide-body a .dashicons-external {
+	width: 1em;
+	height: 1em;
+	margin-left: 2px;
+	font-size: 1em;
+	vertical-align: -.1em;
+	text-decoration: none;
+}
+
+/* obsah návodu */
+.ddt-guide-contents {
+	margin: 1.5em 0;
+	padding: 12px 16px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+}
+.ddt-guide-contents ul {
+	margin: .5em 0 0 1.5em;
+	columns: 2 18rem;
+}
+
+/* oznámení (tip, upozornění) */
+.ddt-guide-body .notice.inline {
+	margin: 1em 0;
+}
+
+/* tabulky */
+.ddt-guide-body table {
+	margin: .5em 0 1em;
+}
+.ddt-guide-body caption {
+	padding: 4px 0;
+	text-align: left;
+	font-weight: 600;
+}
+.ddt-guide-body td code {
+	white-space: nowrap;
+}
+.ddt-guide-status th {
+	width: 16em;
+	font-weight: 600;
+}
+.ddt-guide-status td code,
+.ddt-guide-status small {
+	white-space: normal;
+}
+.ddt-guide-status .dashicons {
+	vertical-align: -5px;
+}
+.ddt-guide-status .is-ok .dashicons {
+	color: #00a32a;
+}
+.ddt-guide-status .is-todo .dashicons {
+	color: #dba617;
+}

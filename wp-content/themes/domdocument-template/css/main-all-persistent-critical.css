@@ -274,11 +274,11 @@ header nav img {
   margin: 1rem 0;
 }
 
-header [role="banner"] {
+header .banner {
   font-size: large;
 }
 
-header [role="banner"] a {
+header .banner a {
   display: inline-block;
   position: relative;
   background: var(--color-bg);
@@ -286,14 +286,14 @@ header [role="banner"] a {
   z-index: 1;
 }
 
-header [role="banner"] img {
+header .banner img {
   padding-right: 0.5em;
   margin-right: 0.5em;
   height: 100%;
   width: 120px;
 }
 
-header [role="banner"] span {
+header .banner span {
   color: var(--color-text-secondary);
   font-size: small;
   font-weight: normal;
@@ -301,7 +301,7 @@ header [role="banner"] span {
 }
 
 @media (min-width: 768px) {
-  header [role="banner"] span {
+  header .banner span {
     display: inline;
   }
 }
@@ -754,6 +754,15 @@ article aside {
   padding: 0.1rem 0.8rem;
 }
 
+/* [2026-11-25] blok Skupina s prvkem aside (vzory bloků „Poznámka v rámečku“, „Návod krok za krokem“, „Novinky ve verzi“):
+   WordPress u klasické šablony vkládá do skupiny div.wp-block-group__inner-container a na ten by mířilo pravidlo
+   main aside>div pro widgety v postranním panelu (druhý rámeček v barvě pozadí uvnitř poznámky) */
+main aside.wp-block-group>.wp-block-group__inner-container {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
 section header {
   padding-top: 0;
   width: 100%;
@@ -888,7 +897,9 @@ amp-img {
   background: var(--color-secondary-accent);
 }
 
+/* [2026-11-25] i figure.in-text – obrázek s licencí v článku: figure > picture + figcaption (<small> do <picture> nepatří) */
 picture.in-text,
+figure.in-text,
 amp-img.in-text {
   float: left;
   margin-right: 1rem;

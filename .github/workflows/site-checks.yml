@@ -1,0 +1,162 @@
+# [2026-11-24] Kontroly statického webu na GitHubu: po každém pushi, u pull requestů a ručně (Actions → Run workflow).
+# Stejné kontroly jako před commitem (.githooks/pre-commit), html-validate tu ale běží vždy.
+# [2026-11-25] Po úspěšných kontrolách zveřejní web z výchozí větve na GitHub Pages. Když kontroly najdou chybu, zveřejnění
+# se neprovede a na webu zůstane předchozí verze.
+# [2026-11-25] Když má repozitář wrangler.toml (export ho vytvoří z nastavení WordPressu „Cloudflare Pages: název projektu“),
+# po kontrolách nasadí web i s API přihlašování přístupovými klíči (functions/) na Cloudflare Pages a předtím spustí migrace
+# databáze D1 (migrations/). Potřebuje tajné hodnoty repozitáře CLOUDFLARE_API_TOKEN a CLOUDFLARE_ACCOUNT_ID – postup je
+# ve functions/README.md. Zveřejnění na GitHub Pages vypne proměnná repozitáře DDT_GITHUB_PAGES = false (Settings → Secrets
+# and variables → Actions → Variables), např. když web běží celý na Cloudflare Pages.
+#
+# Soubor pochází ze šablony domdocument-template (static-export/repository/.github/workflows/site-checks.yml). Export
+# „Vygenerovat statické soubory“ ho kopíruje do repozitáře statického webu, upravovat ho proto ve šabloně.
+#
+# Jednorázové nastavení repozitáře: Settings → Pages → Build and deployment → Source: „GitHub Actions“. Při „Deploy from
+# a branch“ zveřejňuje GitHub každý push sám a bez ohledu na kontroly (zveřejňovací část níže pak skončí chybou).
+# Vlastní doménu bere GitHub z pole Custom domain ve stejném nastavení, soubor CNAME při zveřejnění přes Actions nepoužívá.
+# Zveřejní se obsah commitu bez nástrojů repozitáře (NASTROJE níže).
+
+name: Kontroly a zveřejnění statického webu
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Zveřejňuje se jen push nebo ruční spuštění na výchozí větvi repozitáře (ne pull request ani jiná větev).
+  # Stejná podmínka je u úloh deploy a cloudflare – tam proměnné z env použít nejde.
+  ZVEREJNIT: ${{ github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+  # [2026-11-25] Soubory a složky repozitáře, které na web nepatří (GitHub Pages i Cloudflare Pages): nástroje, API
+  # přihlašování (functions/ nasazuje Cloudflare jako kód, ne jako soubory webu), migrace databáze a nastavení wrangleru.
+  NASTROJE: .github .githooks .site-checks functions migrations wrangler.toml .gitignore
+  WRANGLER: wrangler@4.168.0 # pevná verze nástroje Cloudflare (npx)
+
+concurrency:
+  group: site-checks-${{ github.ref }}
+  # Na výchozí větvi se rozběhnuté zveřejnění nepřerušuje (novější běh počká), jinde novější běh zruší starší.
+  cancel-in-progress: ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+jobs:
+  checks:
+    name: Kontroly
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      cloudflare: ${{ steps.cloudflare.outputs.zapnuto }}
+    steps:
+      - name: Stažení repozitáře
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+          tools: none
+
+      - name: Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: .site-checks/package-lock.json
+
+      - name: Instalace html-validate
+        run: npm ci --prefix .site-checks --no-audit --no-fund
+
+      - name: Kontroly statického webu (.site-checks/check-site.php včetně html-validate a testů API)
+        run: php .site-checks/check-site.php --max=0
+
+      - name: Nasazuje se na Cloudflare Pages? (wrangler.toml)
+        id: cloudflare
+        run: |
+          if [ -f wrangler.toml ]; then echo "zapnuto=true"; else echo "zapnuto=false"; fi >> "$GITHUB_OUTPUT"
+
+      - name: Příprava webu ke zveřejnění
+        if: env.ZVEREJNIT == 'true' && vars.DDT_GITHUB_PAGES != 'false'
+        run: |
+          mkdir "$RUNNER_TEMP/site"
+          git archive --format=tar HEAD | tar -x -C "$RUNNER_TEMP/site"
+          cd "$RUNNER_TEMP/site" && rm -rf $NASTROJE
+
+      - name: Nahrání webu pro GitHub Pages
+        if: env.ZVEREJNIT == 'true' && vars.DDT_GITHUB_PAGES != 'false'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ runner.temp }}/site
+          include-hidden-files: true # i soubory a složky s tečkou na začátku (.nojekyll, .well-known…)
+
+  deploy:
+    name: Zveřejnění na GitHub Pages
+    needs: checks # jen když kontroly prošly
+    if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.DDT_GITHUB_PAGES != 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Zveřejnění
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+  # [2026-11-25] Web a API přihlašování přístupovými klíči na Cloudflare Pages (functions/README.md).
+  cloudflare:
+    name: Zveřejnění na Cloudflare Pages (web a API přihlašování)
+    needs: checks # jen když kontroly (i testy API) prošly
+    if: needs.checks.outputs.cloudflare == 'true' && github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Stažení repozitáře
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Kontrola nastavení Cloudflare
+        run: |
+          chyba=0
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Chybí tajné hodnoty repozitáře CLOUDFLARE_API_TOKEN a CLOUDFLARE_ACCOUNT_ID (Settings → Secrets and variables → Actions → Secrets), postup je ve functions/README.md."
+            chyba=1
+          fi
+          # \VARS\STATIC_EXPORT::CLOUDFLARE_D1_PLACEHOLDER_ID – export ho zapíše, dokud ve WordPressu chybí ID databáze
+          if grep -q '00000000-0000-0000-0000-000000000000' wrangler.toml; then
+            echo "::error file=wrangler.toml::Chybí ID databáze D1. Vyplňte ve WordPressu „Cloudflare D1: ID databáze“ a spusťte export znovu (functions/README.md)."
+            chyba=1
+          fi
+          exit $chyba
+
+      - name: Migrace databáze D1 (migrations/)
+        # DB = vazba databáze ve wrangler.toml (\VARS\STATIC_EXPORT::CLOUDFLARE_D1_BINDING); hotové migrace wrangler přeskočí
+        run: npx --yes "$WRANGLER" d1 migrations apply DB --remote
+
+      - name: Příprava webu ke zveřejnění
+        run: |
+          mkdir "$RUNNER_TEMP/site"
+          git archive --format=tar HEAD | tar -x -C "$RUNNER_TEMP/site"
+          cd "$RUNNER_TEMP/site" && rm -rf $NASTROJE
+
+      - name: Nasazení (soubory webu + functions/ z kořene repozitáře)
+        # Složka webu v příkazu má přednost před pages_build_output_dir z wrangler.toml; functions/ bere wrangler ze složky,
+        # ve které běží. Výchozí větev = produkční nasazení (projekt Pages musí mít stejnou produkční větev).
+        run: npx --yes "$WRANGLER" pages deploy "$RUNNER_TEMP/site" --branch "$VETEV" --commit-hash "$GITHUB_SHA"
+        env:
+          VETEV: ${{ github.event.repository.default_branch }}

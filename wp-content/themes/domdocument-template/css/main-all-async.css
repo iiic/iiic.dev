@@ -195,3 +195,40 @@ a.edit {
   right: 0;
   color: var(--color-secondary);
 }
+/* [2026-11-25] widget „Přihlášení přístupovým klíčem“ (\WIDGET\PasskeyLogin, js/modules/passkey-login.mjs) */
+.passkey-login form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: end;
+  margin: 0.5rem 0;
+}
+
+.passkey-login summary {
+  cursor: pointer;
+}
+
+.passkey-login ul {
+  padding-left: 1.25rem;
+}
+
+.passkey-login li {
+  margin-bottom: 0.25rem;
+}
+
+.passkey-login-note {
+  flex-basis: 100%;
+  color: var(--color-secondary);
+}
+
+.passkey-login [role="status"]:empty {
+  display: none;
+}
+
+.passkey-login-error {
+  color: light-dark(#b00020, #ff8a80);
+}
+
+.passkey-login[aria-busy="true"] {
+  cursor: progress;
+}

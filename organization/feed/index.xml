@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Organizations &#8211; wordpress</title>
+	<atom:link href="https://iiic.dev/organization/feed/index.xml" rel="self" type="application/rss+xml" />
+	<link>https://iiic.dev/</link>
+	<description></description>
+	<lastBuildDate>Fri, 20 Nov 2026 09:39:50 +0000</lastBuildDate>
+	<language>cs</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=7.1.5</generator>
+	<item>
+		<title>Self: Custom organization (auto created)</title>
+		<link>https://iiic.dev/organization/self-custom-organization-auto-created/</link>
+		
+		<dc:creator><![CDATA[ic]]></dc:creator>
+		<pubDate>Fri, 20 Nov 2026 09:39:50 +0000</pubDate>
+				<guid isPermaLink="false">https://iiic.dev/?p=5</guid>
+
+					<description><![CDATA[obsah… vyplnit sem typografii]]></description>
+										<content:encoded><![CDATA[<p>obsah… vyplnit sem typografii</p>
+]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

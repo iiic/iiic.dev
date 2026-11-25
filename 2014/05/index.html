@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="cs" dir="ltr"><head><meta charset="UTF-8"><title>Květen 2014 – wordpress</title><meta name="robots" content="max-image-preview:large"><link rel="alternate" type="application/rss+xml" title="wordpress » RSS zdroj" href="https://iiic.dev/feed/index.xml"><link rel="alternate" type="application/rss+xml" title="wordpress » RSS komentářů" href="https://iiic.dev/comments/feed/index.xml"><style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style><link rel="stylesheet" href="../../wp-content/ddt-shared-styles/wp-block-library-inline-css.b04f0ba1fb7a.css" integrity="sha384-H3kkB6MrLiwNpFGCzO8jpWCIig8V+RkN8eoWddeDxA6n0XH0OnINLsWdKX0NNBv0" crossorigin="anonymous" id="wp-block-library-inline-css">
+<style id="wp-block-archives-inline-css">
+.wp-block-archives{box-sizing:border-box}.wp-block-archives-dropdown label{display:block}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/archives/style.min.css */
+</style>
+<style id="wp-block-categories-inline-css">
+.wp-block-categories{box-sizing:border-box}.wp-block-categories.alignleft{margin-right:2em}.wp-block-categories.alignright{margin-left:2em}.wp-block-categories.wp-block-categories-dropdown.aligncenter{text-align:center}.wp-block-categories .wp-block-categories__label:not(.screen-reader-text){display:block;width:100%}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/categories/style.min.css */
+</style>
+<link rel="stylesheet" href="../../wp-content/ddt-shared-styles/wp-block-heading-inline-css.e39643130fa2.css" integrity="sha384-O3MvMu8hqOm85smXI5FvRESIKhTbCGcmRdl/TW07RQPIBXlHCyuZAOiJ4jYnduAa" crossorigin="anonymous" id="wp-block-heading-inline-css">
+<style id="wp-block-group-inline-css">
+.wp-block-group{box-sizing:border-box}:where(.wp-block-group.wp-block-group-is-layout-constrained){position:relative}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/group/style.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style><link rel="stylesheet" href="../../wp-content/ddt-shared-styles/global-styles-inline-css.a0542a6f0394.css" integrity="sha384-rDahApcOs90hDG57PYtAvp1n7mLsSH1UO6830sm9b1rxUZzzQiwBenqGJJNUbKrZ" crossorigin="anonymous" id="global-styles-inline-css">
+<link rel="stylesheet" id="style-switch-persistent-css" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="alternate stylesheet" id="style-switch-style-light-css" title="Světlý" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="stylesheet" id="style-switch-style-dark-css" title="Tmavý" href="/wp-content/plugins/style-switch/assets/css/dark.css" media="(prefers-color-scheme: dark)"><script data-settings="{&quot;cookie&quot;:&quot;stylesheets&quot;,&quot;ids&quot;:[&quot;style-switch-persistent-css&quot;,&quot;style-switch-style-light-css&quot;,&quot;style-switch-style-dark-css&quot;],&quot;naked&quot;:false,&quot;nakedDay&quot;:{&quot;month&quot;:4,&quot;day&quot;:9}}">
+( () => {
+	const script = document.currentScript;
+	let settings;
+	try {
+		settings = JSON.parse( script ? script.dataset.settings : '' );
+	} catch {
+		return;
+	}
+
+	const prefix = settings.cookie + '=';
+	const pair = document.cookie.split( ';' ).map( ( part ) => part.trim() ).find( ( part ) => part.startsWith( prefix ) );
+	if ( !pair ) {
+		return;
+	}
+	let cookie;
+	try {
+		cookie = JSON.parse( pair.slice( prefix.length ) ); // written by StyleSwitch, e.g. {"/&hellip;/dark.css":{"disabled":false},&hellip;}
+	} catch {
+		return;
+	}
+	if ( !cookie || typeof cookie !== 'object' ) {
+		return;
+	}
+
+	// The first enabled style sheet is the chosen one, '' is the page without CSS.
+	let chosen = null;
+	for ( const [ path, state ] of Object.entries( cookie ) ) {
+		if ( state && state.disabled === false ) {
+			if ( path !== '' ) {
+				chosen = path;
+			} else if ( settings.naked ) {
+				// The page without CSS set automatically for the CSS Naked Day ends with the day ( as in StyleSwitch ).
+				const today = new Date();
+				const isNakedDay = today.getMonth() + 1 === settings.nakedDay.month && today.getDate() === settings.nakedDay.day;
+				if ( !state.byNakedDay || isNakedDay ) {
+					chosen = path;
+				}
+			}
+			break;
+		}
+	}
+	if ( chosen === null ) {
+		return;
+	}
+
+	const links = settings.ids.map( ( id ) => document.getElementById( id ) ).filter( ( link ) => link instanceof HTMLLinkElement );
+	if ( chosen !== '' && !links.some( ( link ) => link.getAttribute( 'title' ) && link.getAttribute( 'href' ) === chosen ) ) {
+		return; // a style sheet the site does not offer ( any more )
+	}
+	for ( const link of links ) {
+		const title = link.getAttribute( 'title' );
+		if ( !title ) { // the default ( persistent ) style sheet, turned off only by the page without CSS
+			if ( chosen === '' ) {
+				link.setAttribute( 'disabled', '' );
+			}
+			continue;
+		}
+		if ( link.getAttribute( 'href' ) !== chosen ) {
+			link.setAttribute( 'disabled', '' );
+			continue;
+		}
+		// The chosen style sheet: hide the attributes which would stop the browser from using it.
+		if ( link.relList.contains( 'alternate' ) ) {
+			link.rel = 'stylesheet';
+			link.setAttribute( 'data-alternate', '' );
+		}
+		link.setAttribute( 'data-title', title );
+		link.removeAttribute( 'title' );
+		const media = link.getAttribute( 'media' );
+		if ( media ) {
+			link.setAttribute( 'data-media', media );
+			link.removeAttribute( 'media' );
+		}
+	}
+	if ( chosen === '' ) { // the page without CSS: also the other style sheets loaded so far, the cookie listener does the rest
+		for ( const link of document.querySelectorAll( 'link[rel=stylesheet]:not([title])' ) ) {
+			link.setAttribute( 'disabled', '' );
+		}
+	}
+} )();
+</script><link rel="stylesheet" id="style-switch-switch-css" href="../../wp-content/plugins/style-switch/assets/css/switch.css?ver=1.0.0" media="all"><link rel="icon" href="../../favicon.ico" sizes="32x32" type="image/x-icon"><link rel="manifest" href="../../manifest.webmanifest"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><link rel="stylesheet" href="../../wp-content/ddt-shared-styles/style.7fe669aac71b.css" integrity="sha384-B9FlN1RzauixV9xsbjRGlqwPiRX0IgBwL8SWMrXgnKIYQmIp9JD36Leriy0Eaxbs" crossorigin="anonymous"><link rel="stylesheet" href="../../wp-content/themes/domdocument-template/css/main-all-persistent-critical.css?v4" integrity="sha256-euhvkfVtMkm4ICVOad+rVgbbPcFsqTXidS7/Ek+imAY=" crossorigin="anonymous"><link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet" crossorigin="anonymous"><script src="../../wp-content/themes/domdocument-template/js/modules/navigatoruadata/isChrome.mjs" type="module" integrity="sha256-QURHFqjYGhatnn5EvveYDhD/3l6r4+CLtm04tx47/dU=" crossorigin="anonymous"></script><meta property="og:title" name="twitter:title" content="Neznámá must-have aplikace pro Android?"><meta property="og:url" content="https://iiic.dev/nezn-m-must-have-aplikace-pro-android/"><meta property="og:description" content="Jak se nazývá opak zkracovače odkazů? Představte si aplikaci, která je tak důležitá, že ji ve svém telefonu prostě musíte mít. Jenže ji zatím ani neznáte! 🙂 A nebo vám ji představím já. Prodlužovač zkrácených adres Zní to jistě zvláštně, ale nejsnáze se dá říct, že jde o opak zkracovače adres. A teď hlavně k […]"><meta name="description" content="Jak se nazývá opak zkracovače odkazů? Představte si aplikaci, která je tak důležitá, že ji ve svém telefonu prostě musíte mít. Jenže ji zatím ani neznáte! 🙂 A nebo vám ji představím já. Prodlužovač zkrácených adres Zní to jistě zvláštně, ale nejsnáze se dá říct, že jde o opak zkracovače adres. A teď hlavně k […]"></head><body class="date" style="--background-position: " itemscope="" itemtype="https://schema.org/WebPage"><header id="top" itemscope="" itemtype="https://schema.org/WPHeader"><nav class="★" aria-label="Hlavní menu"><strong class="banner"><a rel="home" href="../../">wordpress</a></strong><hr><input type="checkbox" id="menu-status" hidden=""><label for="menu-status"><span title="ukaž menu!">[☰]</span><b>menu</b></label></nav></header><hr><main id="index" itemprop="mainContentOfPage"><section id="after-header"></section><div class="★"><div><h1>Měsíc: Květen 2014</h1><nav aria-label="Breadcrumb"><b hidden="">drobečková navigace</b><ol id="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="../../"><span itemprop="name">Domů</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="./" aria-current="page"><span itemprop="name">Měsíc: Květen 2014</span></a><meta itemprop="position" content="2"></li></ol></nav><br><section class="tiles"><article itemscope="" itemtype="https://schema.org/Article" class="h-entry"><h2 itemprop="headline"><a itemprop="url identifier" href="../../nezn-m-must-have-aplikace-pro-android/" content="https://iiic.dev/author/ic/">Neznámá must-have aplikace pro Android?</a></h2><time datetime="2014-05-07T20:27:00+02:00" title="datum vytvoření">7. 5. 2014 v 20:27</time> <br><div itemprop="description">Jak se nazývá opak zkracovače odkazů? Představte si aplikaci, která je tak důležitá, že ji ve svém telefonu prostě musíte mít. Jenže ji zatím ani neznáte! 🙂 A nebo vám ji představím já. Prodlužovač zkrácených adres Zní to jistě zvláštně, ale nejsnáze se dá říct, že jde o opak zkracovače adres. A teď hlavně k […]</div></article><script defer=""></script></section></div><hr><aside itemscope="" itemtype="https://schema.org/WPSideBar"><div id="style_switch-5" class="widget_style_switch"><script id="styleSwitchSettings" type="application/json">
+{"texts":{"caption":"Barevn\u00e9 sch\u00e9ma","nakedStyleCaption":"Bez stylu (\u010dist\u00e9 HTML)","switch":{"stateOnCaption":"Tmav\u00fd","stateOffCaption":"Sv\u011btl\u00fd"}},"resultSnippetAppearance":{"outputFormat":"switch","switch":{"useRolesAsTitle":false,"labelClassName":"style-switch-toggle"},"select":{"useRoleAsOptionTitle":false},"radioList":{"useRoleAsItemTitle":false}}}
+</script>
+<style-switch></style-switch></div><div id="notific-root" hidden=""></div></aside></div></main><hr><footer id="footer"><small class="watermark">iiic.dev</small><div class="★ wp-block-columns" itemscope="" itemtype="https://schema.org/WPFooter"><div class="wp-block-column"><div id="block-5" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Archivy</h2><ul class="wp-block-archives-list wp-block-archives">	<li><a href="../../2020/12/">Prosinec 2020</a></li>
+	<li><a href="../../2020/05/">Květen 2020</a></li>
+	<li><a href="../../2020/04/">Duben 2020</a></li>
+	<li><a href="../../2020/01/">Leden 2020</a></li>
+	<li><a href="../../2019/10/">Říjen 2019</a></li>
+	<li><a href="../../2019/09/">Září 2019</a></li>
+	<li><a href="../../2019/05/">Květen 2019</a></li>
+	<li><a href="./" aria-current="page">Květen 2014</a></li>
+</ul></div></div></div><div id="block-6" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Rubriky</h2><ul class="wp-block-categories-list wp-block-categories-taxonomy-category wp-block-categories">	<li class="cat-item cat-item-1"><a href="../../category/nezarazene/">Nezařazené</a>
+</li>
+</ul></div></div></div><p hidden="">Url: <a href="../../nezn-m-must-have-aplikace-pro-android/" itemprop="url">https://iiic.dev/nezn-m-must-have-aplikace-pro-android/</a></p><p hidden="">Verze schématu: <a href="https://schema.org/docs/releases.html#v12.0" itemprop="schemaVersion">12.0</a></p><meta itemprop="accessMode" content="textual visual"><meta itemprop="accessibilityAPI" content="ARIA"><meta itemprop="accessibilityControl" content="fullKeyboardControl fullMouseControl fullTouchControl"></div><a href="#top" id="scroll-to-top" hidden=""><i title="nahorů">⮝</i></a></div><script type="module">
+		const link7e20ef02=document.createElement("link");
+		link7e20ef02.setAttribute("rel", "stylesheet");
+		link7e20ef02.href="/wp-content/themes/domdocument-template/css/main-all-async.css";
+		document.head.appendChild(link7e20ef02);
+	</script><script type="text/json" id="notific-settings">{"CSSStyleSheets":[{"href":"\/wp-content\/themes\/domdocument-template\/css\/notific.css","integrity":"sha256-DErgeoS4SQg0UMgS8E4mhJbyqNPHbyooBGsPqlRQviw="}],"modulesImportPath":"\/wp-content\/themes\/domdocument-template\/js\/modules"}</script><script src="../../wp-content/themes/domdocument-template/js/modules/notific.mjs?v=0.3" type="module" crossorigin="anonymous"></script><script src="../../wp-content/themes/domdocument-template/js/modules/common.mjs?v=0.9" type="module" crossorigin="anonymous"></script><script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/domdocument-template/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script><script id="style-switch-cookie-listener-js-module" src="../../wp-content/plugins/style-switch/assets/js/style-switch-cookie-listener-example.js?ver=1.4.2" type="module"></script><script id="style-switch-js-module" src="../../wp-content/plugins/style-switch/assets/js/style-switch.mjs?ver=1.4.2" type="module"></script></footer>
+</body></html>

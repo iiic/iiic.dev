@@ -1,1 +1,1 @@
-alert( 'gg' );
+// zde budou nějaké javascripty speciální pro sekci standalone template parts … pokud budou potřeba

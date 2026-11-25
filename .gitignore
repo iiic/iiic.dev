@@ -1,0 +1,9 @@
+# [2026-11-25] Soubor pochází ze šablony domdocument-template (static-export/repository/.gitignore), export „Vygenerovat
+# statické soubory“ ho kopíruje do repozitáře statického webu a další export ho přepíše – upravovat ho ve šabloně.
+# Export dělá před commitem `git add -A`, bez těchto řádků by do repozitáře přidal i lokální databázi z vývoje API.
+
+# Lokální vývoj API přihlašování (npx wrangler … --local, wrangler pages dev): databáze D1 a mezipaměť wrangleru
+.wrangler/
+# lokální proměnné a tajné hodnoty pro `wrangler pages dev` (functions/README.md)
+.dev.vars*
+node_modules/

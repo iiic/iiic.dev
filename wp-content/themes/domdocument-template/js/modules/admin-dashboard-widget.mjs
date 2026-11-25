@@ -10,20 +10,15 @@ if ( rootElement ) {
 		/** @type {Array} */
 		const promises = [];
 
+		// [2026-11-22] Odstraněna poslední adresa '/?fetch-proxy' (PHP endpoint šablony, který tutéž adresu stahoval
+		// na serveru po sleep(2) a obsadil tím jediný proces php-cgi). Adresy níže posílají CORS hlavičku, stačí prohlížeč.
 		[
 			'https://iiic.dev/api/ddt-dashboard-news-and-security/',
 			'https://iiic.dev/api/ddt-dashboard-news-and-security/index.php',
 			'https://iiic.github.io/api/ddt-dashboard-news-and-security/',
 			'https://into.parts/api/ddt-dashboard-news-and-security/',
-			'/?fetch-proxy',
 		].forEach( function ( /** @type {String} */ endpoint )
 		{
-			if ( endpoint === '/?fetch-proxy' ) {
-				const fetchEndpoint = new URL( location );
-				fetchEndpoint.pathname = fetchEndpoint.pathname.replace( '/wp-admin', '' );
-				fetchEndpoint.searchParams.set( 'fetch-proxy', '' );
-				endpoint = fetchEndpoint.href;
-			}
 			promises.push(
 				fetch( endpoint, {
 					method: 'GET',
@@ -37,6 +32,10 @@ if ( rootElement ) {
 					if ( response.ok ) {
 						return response.json();
 					}
+					// [2026-11-22] Dříve se při chybě (404, přesměrování) vrátilo undefined, tedy splněný slib. Promise.any()
+					// bere první SPLNĚNÝ slib, takže rychlejší 404 vyhrála nad funkční adresou a widget hlásil, že se nikam
+					// nepřipojil. Teď chyba slib zamítne a Promise.any() počká na první úspěšnou adresu.
+					throw new Error( endpoint + ': HTTP ' + response.status );
 				} )
 			);
 		} );
@@ -53,6 +52,9 @@ if ( rootElement ) {
 		return Promise.any( promises ).then( function ( /** @type {Object} */ json )
 		{
 			return json;
+		} ).catch( function ()
+		{
+			return null; // [2026-11-22] žádná adresa neodpověděla – displayNewsDomBy() vypíše hlášku o nedostupnosti
 		} );
 	};
 

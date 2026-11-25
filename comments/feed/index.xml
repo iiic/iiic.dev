@@ -11,29 +11,11 @@
 	<atom:link href="https://iiic.dev/comments/feed/index.xml" rel="self" type="application/rss+xml" />
 	<link>https://iiic.dev/</link>
 	<description></description>
-	<lastBuildDate>Fri, 20 Nov 2026 09:33:42 +0000</lastBuildDate>
+	<lastBuildDate>Sun, 22 Nov 2026 21:49:57 +0000</lastBuildDate>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
 	<sy:updateFrequency>
 	1	</sy:updateFrequency>
 	<generator>https://wordpress.org/?v=7.1.5</generator>
-	<item>
-		<title>
-		Komentář k příspěvku Ahoj všichni! od WordPress komentátor		</title>
-		<link>https://iiic.dev/ahoj-vsichni/#comment-1</link>
-
-		<dc:creator><![CDATA[WordPress komentátor]]></dc:creator>
-		<pubDate>Fri, 20 Nov 2026 09:33:42 +0000</pubDate>
-		<guid isPermaLink="false">https://iiic.dev/?p=1#comment-1</guid>
-
-					<description><![CDATA[Zdravím, tohle je komentář.
-Chcete-li začít se schvalováním, úpravami a mazáním komentářů, pak si prohlédněte sekci Komentáře na nástěnce.
-Profilové obrázky komentujících vám přináší služba &lt;a href=&quot;https://gravatar.com&quot;&gt;Gravatar&lt;/a&gt;.]]></description>
-			<content:encoded><![CDATA[<p>Zdravím, tohle je komentář.<br />
-Chcete-li začít se schvalováním, úpravami a mazáním komentářů, pak si prohlédněte sekci Komentáře na nástěnce.<br />
-Profilové obrázky komentujících vám přináší služba <a href="https://gravatar.com">Gravatar</a>.</p>
-]]></content:encoded>
-		
-			</item>
-	</channel>
+</channel>
 </rss>

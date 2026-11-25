@@ -1,0 +1,30 @@
+#!/bin/sh
+# [2026-11-24] Kontroly statického webu před každým commitem – při chybě se commit neprovede.
+#
+# Soubor pochází ze šablony domdocument-template (static-export/repository/.githooks/pre-commit). Export „Vygenerovat
+# statické soubory“ ho kopíruje do repozitáře statického webu, upravovat ho proto ve šabloně. Git ho spouští díky nastavení
+# `git config core.hooksPath .githooks`, které udělá export (v jiném klonu repozitáře příkaz spustit ručně).
+# Přeskočit kontroly jde přes `git commit --no-verify`.
+# Soubor musí mít konce řádků LF, s CRLF ho sh nespustí.
+#
+# Kontroluje se pracovní složka, ne jen soubory připravené ke commitu. Export před commitem přidává všechno (git add -A),
+# takže je to totéž.
+#
+# [2026-11-25] HTML linter html-validate spouští přímo .site-checks/check-site.php (dříve druhý krok tohoto skriptu), takže
+# jeho nálezy jdou přeskočit v .site-checks/ignore.txt stejně jako ostatní. Bez instalace (npm ci --prefix .site-checks)
+# nebo bez Node.js ho check-site.php přeskočí s upozorněním.
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# Kontroly statického webu v PHP 8.4+. Export předá cestu k php.exe v DDT_STATIC_EXPORT_PHP.
+php="${DDT_STATIC_EXPORT_PHP:-php}"
+if command -v "$php" >/dev/null 2>&1; then
+	"$php" .site-checks/check-site.php && exit 0
+else
+	echo "PHP nenalezeno (php v PATH nebo proměnná DDT_STATIC_EXPORT_PHP), kontroly statického webu nejde spustit." >&2
+fi
+
+# Text první věty hledá export (\VARS\STATIC_EXPORT::CHECKS_FAILED_TEXT), měnit jen spolu s ním.
+echo
+echo "Kontroly statického webu neprošly, commit se neprovedl. Chyby opravte, nebo je přeskočte v .site-checks/ignore.txt (viz .site-checks/README.md)." >&2
+exit 1

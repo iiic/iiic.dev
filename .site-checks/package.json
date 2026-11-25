@@ -1,0 +1,12 @@
+{
+	"name": "ddt-site-checks",
+	"private": true,
+	"description": "[2026-11-24] Kontroly statického webu – HTML linter html-validate. Soubor pochází ze šablony domdocument-template (static-export/repository/.site-checks/), export ho kopíruje do repozitáře statického webu.",
+	"license": "UNLICENSED",
+	"engines": {
+		"node": "^22.22.0 || >=24.8.0"
+	},
+	"devDependencies": {
+		"html-validate": "11.22.0"
+	}
+}

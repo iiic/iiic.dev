@@ -1,0 +1,16 @@
+# Cloudflare Pages + D1 – API přihlašování přístupovými klíči (functions/, migrations/, popis ve functions/README.md).
+# Soubor vytváří export „Vygenerovat statické soubory“ šablony domdocument-template z nastavení WordPressu
+# (Standalone template parts & options → „Cloudflare Pages: název projektu“ a „Cloudflare D1: ID databáze“). Ruční změny další export přepíše.
+name = "iiic-dev"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-20"
+
+[vars]
+RP_NAME = "wordpress" # název webu v dialogu přístupových klíčů (další proměnné viz functions/README.md)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ddt-auth"
+# ID databáze zatím není vyplněné: lokálně (wrangler … --local, wrangler pages dev) to nevadí, nasazení na Cloudflare ho potřebuje.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
