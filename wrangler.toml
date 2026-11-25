@@ -11,6 +11,5 @@ RP_NAME = "wordpress" # název webu v dialogu přístupových klíčů (další 
 [[d1_databases]]
 binding = "DB"
 database_name = "ddt-auth"
-# ID databáze zatím není vyplněné: lokálně (wrangler … --local, wrangler pages dev) to nevadí, nasazení na Cloudflare ho potřebuje.
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "a99c200d-7c29-4cbb-bf8e-6c3cc4ea996e"
 migrations_dir = "migrations"
