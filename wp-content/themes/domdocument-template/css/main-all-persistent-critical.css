@@ -1754,3 +1754,18 @@ article:not(.collapsed) #read-more {
 aside [id|=AD] {
   margin-bottom: 1rem;
 }
+
+/* [2026-11-25] vodoznak v patičce (small.watermark, index.php) při tisku. Na obrazovce ho styluje css/main-all-async.css:
+   position: fixed a písmo 9rem, takže se při tisku opakuje na každé stránce. Proto je při tisku výrazně zašedlý, nebo
+   skrytý (volba „Vodoznak při tisku“ v Přizpůsobení → Obrázek na pozadí). Pravidla jsou tady, protože tento soubor
+   je načtený vždy (i bez JavaScriptu); dvě třídy u skrytí přebijí display: block z pozdějšího main-all-async.css */
+@media print {
+  .watermark {
+    color: #000;
+    opacity: 0.1;
+  }
+
+  .watermark.watermark-print-hidden {
+    display: none;
+  }
+}

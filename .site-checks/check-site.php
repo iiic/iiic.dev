@@ -19,6 +19,9 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		[2026-11-25] Když má repozitář složku functions/ (API přihlašování přístupovými klíči na Cloudflare Pages Functions),
 		spustí i její testy (node --test, .site-checks/*.test.mjs) – viz checkApiTests(). Složky functions/, migrations/
 		a .wrangler/ na web nepatří a jako web se nekontrolují.
+		[2026-11-25] Limity hostingu podle .github/hosting.env (vytváří ho export z nastavení WordPressu „Hosting statického
+		webu“): GitHub Pages (web nejvýš 1 GB, .nojekyll), Cloudflare Pages (soubor nejvýš 25 MiB, na bezplatném tarifu
+		nejvýš 20 000 souborů) – viz loadHosting(). Bez souboru jako GitHub Pages (stejně jako workflow).
 		Návratový kód: 0 = bez chyb (upozornění commit nezastaví), 1 = chyby, 2 = chybné použití.
 	*/
 
@@ -62,7 +65,7 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		const CHECKS = [ // id => [ popis, závažnost ] – v tomto pořadí se vypisují
 			self::REQUIRED_FILES => [ 'Povinné soubory (index.html, 404.html, CNAME, .nojekyll)', self::ERROR ],
 			self::FORBIDDEN_FILES => [ 'Soubory, které na veřejný web nepatří (PHP, SQL, klíče, zálohy)', self::ERROR ],
-			self::FILE_SIZE => [ 'Velikost souborů a webu (limity GitHubu)', self::ERROR ],
+			self::FILE_SIZE => [ 'Velikost souborů a webu (limity GitHubu a Cloudflare Pages)', self::ERROR ],
 			self::CASE_COLLISION => [ 'Cesty, které se liší jen velikostí písmen', self::ERROR ],
 			self::HTML_SYNTAX => [ 'Syntaxe HTML (chyby parseru HTML5)', self::ERROR ],
 			self::HTML_BASICS => [ 'Základ stránky (doctype, jazyk, kódování, titulek)', self::ERROR ],
@@ -123,6 +126,12 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		const MAX_FILE_SIZE = 100 * 1024 * 1024; // GitHub soubor nad 100 MB odmítne
 		const LARGE_FILE_SIZE = 50 * 1024 * 1024; // od 50 MB GitHub při pushi varuje
 		const MAX_SITE_SIZE = 1024 * 1024 * 1024; // GitHub Pages: web nejvýš 1 GB
+		// [2026-11-25] hosting statického webu (loadHosting()); klíče jako \VARS\STATIC_EXPORT::HOSTING_KEY_… šablony, čte je i workflow
+		const HOSTING_FILE = '.github/hosting.env';
+		const HOSTING_GITHUB_PAGES = 'GITHUB_PAGES';
+		const HOSTING_CLOUDFLARE_PAGES = 'CLOUDFLARE_PAGES';
+		const CLOUDFLARE_MAX_FILE_SIZE = 25 * 1024 * 1024; // Cloudflare Pages nasadí soubor nejvýš 25 MiB (všechny tarify)
+		const CLOUDFLARE_MAX_FILES = 20000; // Cloudflare Pages: nejvýš 20 000 souborů na bezplatném tarifu (placené 100 000)
 
 		const HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
 		const URL_SCHEMES = [ 'http', 'https' ]; // jiná schémata (mailto:, tel:, data:, javascript:…) se nekontrolují
@@ -166,6 +175,9 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		private string $htmlLintSkipped = '';    // proč se nespustil
 		private ?string $apiTestsResult = null;  // [2026-11-25] souhrn testů API („7 prošlo“), null = nespustily se
 		private string $apiTestsSkipped = '';    // proč se nespustily
+		private bool $githubPages = true;        // [2026-11-25] web na GitHub Pages (loadHosting())
+		private bool $cloudflarePages = false;   // [2026-11-25] web nebo API na Cloudflare Pages
+		private string $hostingSource = 'bez ' . self::HOSTING_FILE;
 
 		public function __construct( string $root, ?string $siteUrl, int $max )
 		{
@@ -182,6 +194,7 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		{
 			$startedAt = microtime( true );
 			$this->loadIgnoreRules();
+			$this->loadHosting(); // [2026-11-25]
 			$this->collectFiles();
 			$this->checkRepositoryFiles();
 			$htmlFiles = [];
@@ -212,6 +225,33 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 		}
 
 		/* ---------- soubory ---------- */
+
+		/*
+			[2026-11-25] Kam se web zveřejňuje: řádky GITHUB_PAGES=true/false a CLOUDFLARE_PAGES=true/false z HOSTING_FILE (stejně
+			je čte workflow .github/workflows/site-checks.yml). Neplatný nebo chybějící řádek = výchozí hodnota (GitHub Pages ano,
+			Cloudflare ne).
+		*/
+		private function loadHosting() : void
+		{
+			$path = $this->root . '/' . self::HOSTING_FILE;
+			if ( !is_file( $path ) ) {
+				return;
+			}
+			$lines = preg_split( '~\R~', (string) file_get_contents( $path ) ) ?: [];
+			$this->githubPages = !in_array( self::HOSTING_GITHUB_PAGES . '=false', $lines, true );
+			$this->cloudflarePages = in_array( self::HOSTING_CLOUDFLARE_PAGES . '=true', $lines, true );
+			$this->hostingSource = self::HOSTING_FILE;
+		}
+
+		private function hostingLabel() : string
+		{
+			return match ( true ) {
+				$this->githubPages && $this->cloudflarePages => 'web na GitHub Pages, API na Cloudflare Pages',
+				$this->cloudflarePages => 'web i API na Cloudflare Pages',
+				$this->githubPages => 'GitHub Pages',
+				default => 'nikam (GITHUB_PAGES=false bez CLOUDFLARE_PAGES=true)',
+			} . ' (' . $this->hostingSource . ')';
+		}
 
 		private function collectFiles() : void
 		{
@@ -257,7 +297,7 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 				$this->add( self::REQUIRED_FILES, self::INDEX_FILE, 0, 'chybí úvodní stránka' );
 			}
 			if ( !isset( $this->files[self::NOT_FOUND_FILE] ) ) {
-				$this->add( self::REQUIRED_FILES, self::NOT_FOUND_FILE, 0, 'chybí stránka 404 (GitHub Pages by místo ní zobrazil svou)' );
+				$this->add( self::REQUIRED_FILES, self::NOT_FOUND_FILE, 0, 'chybí stránka 404 (GitHub Pages by místo ní zobrazil svou, Cloudflare Pages úvodní stránku)' );
 			}
 			if ( $this->siteHost === null ) {
 				$this->add( self::RECOMMENDATIONS, self::CNAME_FILE, 0, 'chybí – absolutní adresy webu (canonical, sitemapa, RSS) se nekontrolují; adresu jde zadat parametrem ' . self::SITE_URL_OPTION );
@@ -275,14 +315,19 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 				}
 				if ( $size > self::MAX_FILE_SIZE ) {
 					$this->add( self::FILE_SIZE, $file, 0, sprintf( '%s – GitHub soubory nad 100 MB odmítne', $this->formatSize( $size ) ) );
+				} else if ( $this->cloudflarePages && $size > self::CLOUDFLARE_MAX_FILE_SIZE ) { // [2026-11-25]
+					$this->add( self::FILE_SIZE, $file, 0, sprintf( '%s – Cloudflare Pages nasadí soubory nejvýš do 25 MiB (hosting: %s)', $this->formatSize( $size ), $this->hostingLabel() ) );
 				} else if ( $size > self::LARGE_FILE_SIZE ) {
 					$this->add( self::RECOMMENDATIONS, $file, 0, sprintf( '%s – GitHub od 50 MB varuje, zvažte menší soubor', $this->formatSize( $size ) ) );
 				}
-				if ( !isset( $this->files[self::NOJEKYLL_FILE] ) && preg_match( '~(?:^|/)_~', $file ) ) {
+				if ( $this->githubPages && !isset( $this->files[self::NOJEKYLL_FILE] ) && preg_match( '~(?:^|/)_~', $file ) ) { // [2026-11-25] jen GitHub Pages
 					$this->add( self::REQUIRED_FILES, $file, 0, 'začíná podtržítkem a bez souboru .nojekyll ho GitHub Pages (Jekyll) nezveřejní' );
 				}
 			}
-			if ( $total > self::MAX_SITE_SIZE ) {
+			if ( $this->cloudflarePages && count( $this->files ) > self::CLOUDFLARE_MAX_FILES ) { // [2026-11-25]
+				$this->add( self::RECOMMENDATIONS, '.', 0, sprintf( 'web má %d souborů – Cloudflare Pages jich na bezplatném tarifu nasadí nejvýš %d (placené tarify 100 000)', count( $this->files ), self::CLOUDFLARE_MAX_FILES ) );
+			}
+			if ( $this->githubPages && $total > self::MAX_SITE_SIZE ) { // [2026-11-25] jen GitHub Pages
 				$this->add( self::FILE_SIZE, '.', 0, sprintf( 'web má %s – GitHub Pages zveřejní nejvýš 1 GB', $this->formatSize( $total ) ) );
 			}
 		}
@@ -1082,6 +1127,7 @@ declare(strict_types=1); // [2026-11-24] striktní typy jako v celé šabloně (
 			$warnings = 0;
 			$this->write( $this->paint( 'Kontroly statického webu', '1' ) . ': ' . $this->root );
 			$this->write( 'Adresa webu: ' . ( $this->siteUrlSource !== '' ? $this->siteUrlSource : 'neznámá' ) );
+			$this->write( 'Hosting: ' . $this->hostingLabel() ); // [2026-11-25]
 			$this->write( sprintf( 'Zkontrolováno: %d stránek HTML, %d XML, %d JSON, %d CSS, %d souborů celkem (%s s)', $this->counts['html'], $this->counts['xml'], $this->counts['json'], $this->counts['css'], count( $this->files ), number_format( $seconds, 1, ',', ' ' ) ) );
 			$this->write( 'HTML linter: ' . ( $this->htmlLintVersion !== null ? 'html-validate ' . $this->htmlLintVersion : 'nespuštěn' . ( $this->htmlLintSkipped !== '' ? ' (' . $this->htmlLintSkipped . ')' : '' ) ) ); // [2026-11-25]
 			$this->write( 'Testy API: ' . ( $this->apiTestsResult ?? 'nespuštěny' . ( $this->apiTestsSkipped !== '' ? ' (' . $this->apiTestsSkipped . ')' : '' ) ) ); // [2026-11-25] řádek hledá export (\VARS\STATIC_EXPORT::CHECKS_SUMMARY_PATTERN)

@@ -6,7 +6,7 @@ pages_build_output_dir = "."
 compatibility_date = "2026-11-20"
 
 [vars]
-RP_NAME = "wordpress" # název webu v dialogu přístupových klíčů (další proměnné viz functions/README.md)
+RP_NAME = "iiic.dev" # název webu v dialogu přístupových klíčů (další proměnné viz functions/README.md)
 
 [[d1_databases]]
 binding = "DB"

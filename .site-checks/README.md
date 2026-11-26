@@ -5,19 +5,33 @@ Testy a lintery výstupu exportu „Vygenerovat statické soubory“ (WordPress,
 - **před každým commitem** v tomto repozitáři (`.githooks/pre-commit`), i před commitem, který dělá export. Když kontroly
   najdou chybu, commit se neprovede a export skončí s hlášením v horní liště WordPressu (celý výpis je v protokolu exportu).
 - **na GitHubu** po každém pushi a u pull requestů (`.github/workflows/site-checks.yml`, záložka Actions). Nálezy se
-  ukážou i jako anotace u souborů. Push do výchozí větve se po úspěšných kontrolách **zveřejní na GitHub Pages**. Když
-  kontroly najdou chybu, zveřejnění se neprovede a na webu zůstane předchozí verze.
+  ukážou i jako anotace u souborů. Push do výchozí větve se po úspěšných kontrolách **zveřejní** – na GitHub Pages,
+  na Cloudflare Pages, nebo na obojí podle `.github/hosting.env` (viz níže). Když kontroly najdou chybu, zveřejnění se
+  neprovede a na webu zůstane předchozí verze.
 
-Aby zveřejňování hlídaly kontroly, musí být v nastavení repozitáře **Settings → Pages → Build and deployment → Source:
+[2026-11-25] **Kam se zveřejňuje** určuje soubor `.github/hosting.env`, který vytváří export z nastavení WordPressu
+**Hosting statického webu** (Nastavení → Standalone template parts & options):
+
+| Hosting | `GITHUB_PAGES` | `CLOUDFLARE_PAGES` | Zveřejní |
+|---|---|---|---|
+| Jen GitHub | `true` | `false` | GitHub Pages – čistě statický web (export do repozitáře nedá `functions/` ani `migrations/`) |
+| GitHub + Cloudflare – web i API na Cloudflare Pages | `false` | `true` | Cloudflare Pages – web i API přihlašování (`functions/README.md`) |
+| GitHub + Cloudflare – web na GitHub Pages, API na Cloudflare | `true` | `true` | obojí: web na GitHub Pages, API na Cloudflare Pages (vlastní subdoména) |
+
+Bez souboru se zveřejní jen na GitHub Pages. Soubor nahradil proměnnou repozitáře `DDT_GITHUB_PAGES` (už se nečte).
+Podle stejného souboru hlídá `check-site.php` limity hostingu (kontrola `velikost`).
+
+Aby zveřejňování na GitHub Pages hlídaly kontroly, musí být v nastavení repozitáře **Settings → Pages → Build and deployment → Source:
 „GitHub Actions“**. Při „Deploy from a branch“ zveřejňuje GitHub každý push sám, bez ohledu na kontroly, a zveřejňovací
 část workflow skončí chybou. Vlastní doménu (`iiic.dev`) pak GitHub bere z pole **Custom domain** ve stejném nastavení.
 Soubor `CNAME` při zveřejnění přes Actions nepoužívá, kontroly z něj ale berou adresu webu. Zveřejní se obsah commitu bez
 složek `.github/`, `.githooks/` a `.site-checks/` ([2026-11-25] a bez API přihlašování: `functions/`, `migrations/`,
 `wrangler.toml`, `.gitignore`).
 
-[2026-11-25] Když má repozitář `wrangler.toml` (vytváří ho export z nastavení Cloudflare ve WordPressu), workflow po
-kontrolách nasadí web i s API přihlašování přístupovými klíči na **Cloudflare Pages** – nastavení a postup jsou
-ve `functions/README.md`. Zveřejňování na GitHub Pages vypne proměnná repozitáře `DDT_GITHUB_PAGES` = `false`.
+[2026-11-25] S hostingem GitHub + Cloudflare workflow po kontrolách nasadí web i s API přihlašování přístupovými klíči
+na **Cloudflare Pages** (potřebuje `wrangler.toml`, ten vytváří export) – nastavení a postup jsou ve `functions/README.md`.
+S webem jen na Cloudflare Pages vypněte GitHub Pages v nastavení repozitáře (Settings → Pages), jinak tam zůstane
+poslední zveřejněná verze.
 
 Složky `.site-checks/`, `.githooks/` a `.github/` ([2026-11-25] i `functions/`, `migrations/` a `.gitignore`) pochází
 ze šablony (`static-export/repository/`) a každý export je přepíše. Změny proto dělat ve šabloně. Jediný soubor, který sem patří ručně, je `.site-checks/ignore.txt` (viz níže).
@@ -54,9 +68,9 @@ Chyby zastaví commit i zveřejnění (id kontroly je ve výpisu v hranatých z�
 
 | Kontrola | Co hledá |
 |---|---|
-| `povinne-soubory` | `index.html`, `404.html`, platný `CNAME`; soubory začínající `_` bez `.nojekyll` (GitHub Pages by je nezveřejnil) |
+| `povinne-soubory` | `index.html`, `404.html`, platný `CNAME`; soubory začínající `_` bez `.nojekyll` (GitHub Pages by je nezveřejnil; [2026-11-25] jen s GitHub Pages) |
 | `zakazane-soubory` | PHP, SQL, databáze, `.env`, `wp-config*`, klíče (`.pem`, `.key`, `id_rsa`…), zálohy (`.bak`, `.old`, `~`) |
-| `velikost` | soubor nad 100 MB (GitHub ho odmítne), web nad 1 GB (limit GitHub Pages) |
+| `velikost` | soubor nad 100 MB (GitHub ho odmítne), web nad 1 GB (limit GitHub Pages); [2026-11-25] s Cloudflare Pages (`CLOUDFLARE_PAGES=true` v `.github/hosting.env`) soubor nad 25 MiB (Cloudflare ho nenasadí) |
 | `velikost-pismen` | cesty, které se liší jen velikostí písmen (na Windows a macOS se při klonování přepíšou) |
 | `syntaxe-html` | chyby parseru HTML5 (neuzavřené a překřížené značky, `&nbsp` bez středníku…) |
 | `zaklad-stranky` | `<!DOCTYPE html>`, `<html lang>`, `<meta charset="utf-8">`, právě jeden neprázdný `<title>` |
@@ -75,7 +89,7 @@ Chyby zastaví commit i zveřejnění (id kontroly je ve výpisu v hranatých z�
 
 Upozornění (commit nezastaví): `html-validate-upozorneni` (pravidla html-validate nastavená jako `warn`),
 `lokalni-adresy-v-textu` (localhost zmíněný v textu článku), `alt-obrazku` (`<img>` bez `alt`), `zbytecne-soubory`
-(`.DS_Store`, `Thumbs.db`), `doporuceni` (chybí `<meta name="viewport">`, `robots.txt` zakazuje celý web, soubor nad
+(`.DS_Store`, `Thumbs.db`), `doporuceni` (chybí `<meta name="viewport">`, `robots.txt` zakazuje celý web, [2026-11-25] s Cloudflare Pages víc než 20 000 souborů – limit bezplatného tarifu, soubor nad
 50 MB, nepoužité pravidlo v `ignore.txt`, html-validate není nainstalovaný).
 
 ## Přeskočení známých nálezů – `.site-checks/ignore.txt`

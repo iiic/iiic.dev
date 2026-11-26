@@ -1,0 +1,63 @@
+/*
+	[2026-11-25] Doplněk výchozích stylů knihovny Dialogic (js/modules/dialogic/<verze>/css/dialogic.css) pro okna šablony
+	domdocument-template – třída ddt-dialog (\CSS\CLASS_NAMES\DIALOGIC::DIALOG) z nastavení oken
+	(\FUNCTIONS\DIALOGIC\getSettings()). Soubor načítá knihovna sama (nastavení CSSStyleSheets) s prvním oknem.
+	Po změně přepočítat \VARS\DIALOGIC::THEME_STYLESHEET_INTEGRITY a zvýšit ?v… (pravidlo 9).
+*/
+
+/*
+	Dialogic otevírá okna metodou show(), ne showModal() – okno není v horní vrstvě prohlížeče, pořadí určuje z-index.
+	Okno i jeho pozadí (tlačítko .closer přes celou obrazovku) jsou nad stránkou i levým menu administrace (9990),
+	ale pod horní lištou WordPressu (#wpadminbar 99999): průběh exportu a „Zrušit export“ v ní zůstávají dostupné.
+*/
+dialog.ddt-dialog {
+	z-index: 99998;
+	width: 36em;
+	font: 14px/1.5 system-ui, sans-serif; /* stejné písmo v administraci i na webu */
+}
+
+@media (max-width: 60em) {
+	dialog.ddt-dialog {
+		max-width: calc(100% - 2em); /* knihovna má 60 %, na úzké obrazovce by se pole nevešlo */
+	}
+}
+
+dialog.ddt-dialog h3 {
+	font-size: 1.25em;
+	line-height: 1.3;
+}
+
+dialog.ddt-dialog form,
+dialog.ddt-dialog form p {
+	margin: 0.5em 0 0;
+}
+
+dialog.ddt-dialog label {
+	display: block;
+	font-weight: 600;
+}
+
+dialog.ddt-dialog input[type="text"],
+dialog.ddt-dialog input[type="password"] {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+dialog.ddt-dialog code {
+	overflow-wrap: anywhere;
+}
+
+dialog.ddt-dialog .ddt-dialog-hint {
+	font-size: 0.9em;
+	opacity: 0.8;
+}
+
+dialog.ddt-dialog .ddt-dialog-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+}
+
+dialog.ddt-dialog [role="status"]:empty {
+	display: none;
+}

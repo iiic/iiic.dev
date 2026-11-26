@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="cs" dir="ltr"><head><meta charset="UTF-8"><title>Javascript dialog stylování a polyfill – iiic.dev</title><link rel="preload" href="../wp-content/themes/domdocument-template/fonts/rubik/rubik-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="../wp-content/themes/domdocument-template/fonts/rubik/rubik-latin-ext.woff2" as="font" type="font/woff2" crossorigin="anonymous"><meta name="robots" content="max-image-preview:large"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS zdroj" href="https://iiic.dev/feed/index.xml"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS komentářů" href="https://iiic.dev/comments/feed/index.xml"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS komentářů pro Javascript dialog stylování a polyfill" href="https://iiic.dev/javascript-dialog-stylovani-a-polyfill/feed/index.xml"><style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style><link rel="stylesheet" href="../wp-content/ddt-shared-styles/wp-block-library-inline-css.b04f0ba1fb7a.css" integrity="sha384-H3kkB6MrLiwNpFGCzO8jpWCIig8V+RkN8eoWddeDxA6n0XH0OnINLsWdKX0NNBv0" crossorigin="anonymous" id="wp-block-library-inline-css">
+<style id="wp-block-archives-inline-css">
+.wp-block-archives{box-sizing:border-box}.wp-block-archives-dropdown label{display:block}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/archives/style.min.css */
+</style>
+<style id="wp-block-categories-inline-css">
+.wp-block-categories{box-sizing:border-box}.wp-block-categories.alignleft{margin-right:2em}.wp-block-categories.alignright{margin-left:2em}.wp-block-categories.wp-block-categories-dropdown.aligncenter{text-align:center}.wp-block-categories .wp-block-categories__label:not(.screen-reader-text){display:block;width:100%}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/categories/style.min.css */
+</style>
+<link rel="stylesheet" href="../wp-content/ddt-shared-styles/wp-block-heading-inline-css.e39643130fa2.css" integrity="sha384-O3MvMu8hqOm85smXI5FvRESIKhTbCGcmRdl/TW07RQPIBXlHCyuZAOiJ4jYnduAa" crossorigin="anonymous" id="wp-block-heading-inline-css">
+<style id="wp-block-group-inline-css">
+.wp-block-group{box-sizing:border-box}:where(.wp-block-group.wp-block-group-is-layout-constrained){position:relative}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/group/style.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style><link rel="stylesheet" href="../wp-content/ddt-shared-styles/global-styles-inline-css.a078d96d756d.css" integrity="sha384-9yEEa0kQig424AK2wrxjg7FAIBEZScxbpwRA0yUd1ZHlyePB9vpMs+8LDjStDASn" crossorigin="anonymous" id="global-styles-inline-css">
+<link rel="stylesheet" id="style-switch-persistent-css" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="alternate stylesheet" id="style-switch-style-light-css" title="Světlý" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="stylesheet" id="style-switch-style-dark-css" title="Tmavý" href="/wp-content/plugins/style-switch/assets/css/dark.css" media="(prefers-color-scheme: dark)"><script data-settings="{&quot;cookie&quot;:&quot;stylesheets&quot;,&quot;ids&quot;:[&quot;style-switch-persistent-css&quot;,&quot;style-switch-style-light-css&quot;,&quot;style-switch-style-dark-css&quot;],&quot;naked&quot;:false,&quot;nakedDay&quot;:{&quot;month&quot;:4,&quot;day&quot;:9}}">
+( () => {
+	const script = document.currentScript;
+	let settings;
+	try {
+		settings = JSON.parse( script ? script.dataset.settings : '' );
+	} catch {
+		return;
+	}
+
+	const prefix = settings.cookie + '=';
+	const pair = document.cookie.split( ';' ).map( ( part ) => part.trim() ).find( ( part ) => part.startsWith( prefix ) );
+	if ( !pair ) {
+		return;
+	}
+	let cookie;
+	try {
+		cookie = JSON.parse( pair.slice( prefix.length ) ); // written by StyleSwitch, e.g. {"/&hellip;/dark.css":{"disabled":false},&hellip;}
+	} catch {
+		return;
+	}
+	if ( !cookie || typeof cookie !== 'object' ) {
+		return;
+	}
+
+	// The first enabled style sheet is the chosen one, '' is the page without CSS.
+	let chosen = null;
+	for ( const [ path, state ] of Object.entries( cookie ) ) {
+		if ( state && state.disabled === false ) {
+			if ( path !== '' ) {
+				chosen = path;
+			} else if ( settings.naked ) {
+				// The page without CSS set automatically for the CSS Naked Day ends with the day ( as in StyleSwitch ).
+				const today = new Date();
+				const isNakedDay = today.getMonth() + 1 === settings.nakedDay.month && today.getDate() === settings.nakedDay.day;
+				if ( !state.byNakedDay || isNakedDay ) {
+					chosen = path;
+				}
+			}
+			break;
+		}
+	}
+	if ( chosen === null ) {
+		return;
+	}
+
+	const links = settings.ids.map( ( id ) => document.getElementById( id ) ).filter( ( link ) => link instanceof HTMLLinkElement );
+	if ( chosen !== '' && !links.some( ( link ) => link.getAttribute( 'title' ) && link.getAttribute( 'href' ) === chosen ) ) {
+		return; // a style sheet the site does not offer ( any more )
+	}
+	for ( const link of links ) {
+		const title = link.getAttribute( 'title' );
+		if ( !title ) { // the default ( persistent ) style sheet, turned off only by the page without CSS
+			if ( chosen === '' ) {
+				link.setAttribute( 'disabled', '' );
+			}
+			continue;
+		}
+		if ( link.getAttribute( 'href' ) !== chosen ) {
+			link.setAttribute( 'disabled', '' );
+			continue;
+		}
+		// The chosen style sheet: hide the attributes which would stop the browser from using it.
+		if ( link.relList.contains( 'alternate' ) ) {
+			link.rel = 'stylesheet';
+			link.setAttribute( 'data-alternate', '' );
+		}
+		link.setAttribute( 'data-title', title );
+		link.removeAttribute( 'title' );
+		const media = link.getAttribute( 'media' );
+		if ( media ) {
+			link.setAttribute( 'data-media', media );
+			link.removeAttribute( 'media' );
+		}
+	}
+	if ( chosen === '' ) { // the page without CSS: also the other style sheets loaded so far, the cookie listener does the rest
+		for ( const link of document.querySelectorAll( 'link[rel=stylesheet]:not([title])' ) ) {
+			link.setAttribute( 'disabled', '' );
+		}
+	}
+} )();
+</script><link rel="stylesheet" id="style-switch-switch-css" href="../wp-content/plugins/style-switch/assets/css/switch.css?ver=1.0.0" media="all"><link rel="canonical" href="https://iiic.dev/javascript-dialog-stylovani-a-polyfill/"><link rel="stylesheet" href="../wp-content/ddt-shared-styles/style.b1b8f3c1eb50.css" integrity="sha384-T/9G/CWI5dsWCQKVMHq2OutGS9PSVOmeYn/p70kB/9bhFY2eDhV9Id5dK6R73hVo" crossorigin="anonymous" class="wp-fonts-local"><link rel="icon" href="../favicon.ico" sizes="32x32" type="image/x-icon"><link rel="manifest" href="../manifest.webmanifest"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><link rel="stylesheet" href="../wp-content/ddt-shared-styles/style.7fe669aac71b.css" integrity="sha384-B9FlN1RzauixV9xsbjRGlqwPiRX0IgBwL8SWMrXgnKIYQmIp9JD36Leriy0Eaxbs" crossorigin="anonymous"><link rel="stylesheet" href="../wp-content/themes/domdocument-template/css/main-all-persistent-critical.css?v5" integrity="sha256-LqxbZDi22cujVUA8s69PWRwURvFsZhuv1fjEFNKd74A=" crossorigin="anonymous"><link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet" crossorigin="anonymous"><script src="../wp-content/themes/domdocument-template/js/modules/navigatoruadata/isChrome.mjs" type="module" integrity="sha256-QURHFqjYGhatnn5EvveYDhD/3l6r4+CLtm04tx47/dU=" crossorigin="anonymous"></script><meta property="og:title" name="twitter:title" content="Javascript dialog stylování a polyfill"><meta property="og:type" content="article"><meta property="og:url" content="https://iiic.dev/javascript-dialog-stylovani-a-polyfill/"><meta property="og:description" content="Celý polyfill je v jediné souboru dialogicPolyfill.mjs. Do stránky ho vložíte například takto: <script type=&quot;module&quot; src=&quot;/dialogicPolyfill.mjs&quot; crossorigin=&quot;anonymous&quot; integrity=&quot;sha256-tcuKQ/zHdgYxhMhX4ouXfqnqtOMXek83f//3owjsOe0=&quot;></script> Zdroják? Jasně vypadá takto: https://iiic.dev/js/dialogicPolyfill.mjs A to je vše! Teď už používáte html dialog element jak je popsáno ve specifikaci (například) na MDN: The Dialog element bude to fungovat i v prohlížečích které jinak podporu nemají. Další […]"><meta name="description" content="Celý polyfill je v jediné souboru dialogicPolyfill.mjs. Do stránky ho vložíte například takto: <script type=&quot;module&quot; src=&quot;/dialogicPolyfill.mjs&quot; crossorigin=&quot;anonymous&quot; integrity=&quot;sha256-tcuKQ/zHdgYxhMhX4ouXfqnqtOMXek83f//3owjsOe0=&quot;></script> Zdroják? Jasně vypadá takto: https://iiic.dev/js/dialogicPolyfill.mjs A to je vše! Teď už používáte html dialog element jak je popsáno ve specifikaci (například) na MDN: The Dialog element bude to fungovat i v prohlížečích které jinak podporu nemají. Další […]"></head><body class="single" style="--background-position: " itemscope="" itemtype="https://schema.org/WebPage"><header id="top" itemscope="" itemtype="https://schema.org/WPHeader"><nav class="★" aria-label="Hlavní menu"><strong class="banner"><a rel="home" href="../">iiic.dev</a></strong><hr><input type="checkbox" id="menu-status" hidden=""><label for="menu-status"><span title="ukaž menu!">[☰]</span><b>menu</b></label></nav></header><hr><main id="index" itemprop="mainContentOfPage"><section id="after-header"></section><div class="★"><article itemscope="" itemtype="https://schema.org/Article" id="post-274" class=" h-entry"><header><a title="trvalý odkaz na článek" itemprop="url mainEntityOfPage" href="./" class="u-url">#</a><h1 itemprop="headline name" class="p-name">Javascript dialog stylování a polyfill</h1><time itemprop="datePublished" datetime="2019-09-11T03:31:16+02:00" class="dt-published" title="datum uveřejnění">11. 9. 2019 v 3:31</time><br><time itemprop="dateModified" datetime="2026-11-22T22:49:57+01:00" class="dt-updated" title="datum poslední úpravy" hidden="">22. 11. 2026 v 22:49</time><nav aria-label="Breadcrumb"><b hidden="">drobečková navigace</b><ol id="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="../"><span itemprop="name">Domů</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="./" aria-current="page"><span itemprop="name">Javascript dialog stylování a polyfill</span></a><meta itemprop="position" content="2"></li></ol></nav></header><div id="categories"><strong hidden="">Rubriky</strong><ul><li class="p-category"><a href="../category/nezarazene/"><i>Nezařazené</i></a></li></ul></div><section itemprop="articleBody" class="e-content"><ul id="share-actions"><li id="share" title="Share: Sdílet prostřednictvím prohlížeče"><button type="button" disabled="">Share</button></li><li id="twitter" title="Twitter: Sdílet na Twitter"><a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fiiic.dev%2Fjavascript-dialog-stylovani-a-polyfill%2F&amp;text=Javascript+dialog+stylov%C3%A1n%C3%AD+a+polyfill&amp;hashtags=nezarazene" target="_blank"><i>Twitter</i></a></li><li id="facebook" title="Facebook: Sdílet na Facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fiiic.dev%2Fjavascript-dialog-stylovani-a-polyfill%2F" target="_blank"><i>Facebook</i></a></li><li id="email" title="E-mail: Sdílet prostřednictvím emailu"><a href="mailto:?subject=Javascript+dialog+stylov%C3%A1n%C3%AD+a+polyfill&amp;body=https%3A%2F%2Fiiic.dev%2Fjavascript-dialog-stylovani-a-polyfill%2F" target="_blank"><i>E-mail</i></a></li></ul><ul id="print-and-epub"><li><button type="button" title="Tisk tohoto článku" id="print" disabled="">Tisk článku</button></li></ul><p>Celý polyfill je v jediné souboru <code>dialogicPolyfill.mjs</code>. Do stránky ho vložíte například takto:</p><pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"module"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/dialogicPolyfill.mjs"</span> <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">"anonymous"</span> <span class="hljs-attr">integrity</span>=<span class="hljs-string">"sha256-tcuKQ/zHdgYxhMhX4ouXfqnqtOMXek83f//3owjsOe0="</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre><p>Zdroják? Jasně vypadá takto: <a href="https://iiic.dev/js/dialogicPolyfill.mjs">https://iiic.dev/js/dialogicPolyfill.mjs</a></p><p>A to je vše! Teď už používáte html <code>dialog</code> element jak je popsáno ve specifikaci (například) na <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog">MDN: The Dialog element</a> bude to fungovat i v prohlížečích které jinak podporu nemají.</p><p>Další soubory v repositáři jako <code>example-usage.html</code> a <code>example.css</code> jsou tam jako ukázka, snad někomu pomohou se lépe zorientovat.</p><h2 id="o-dialog-elementu">O <code>dialog</code> elementu</h2><p>Je to jednoduché stav v jakém se nachází dialog element je uložen v (bool) atributu <code>open</code>, pokud je tento atribut přítomen, je dialog viditelný, pokud není, dialog element je skrytý. Pro přepínání stavu se používají <code>javascript</code>ové funkce <code>show()</code> and <code>close()</code> na příslušném <code>HTMLDialogElement</code> elementu. Podívejte se do příkladového souboru.</p><h2 id="detailnější-popis">Detailnější popis</h2><p>Tím, že polyfill je ve formě <code>javascript</code>ového modulu volá se jako by měl nastaven atribut <code>defer</code> (ano, dokonce i když tam ten atribut není explicitně napsán, stejně se spouští jako <code>defer</code>), tedy stažení souboru asynchronně a samotné spuštění až po dokončení parsování celé stránky.</p><p>Toto chování můžete změnit na synchronní pomocí atributu <code>async</code>, ale nemůžete dosáhnout synchronního chování.</p><p>Všechny prohlížeče mají <code>dialog</code> element "ostylovaný" takovým celkem nevzhledným černým rámečkem, zarovnáním na střed stránky (ovšem pouze v ose x tedy horizontálně), zajímavé je že i prohlížeče, které zatím neimplementovaly funkce <code>show()</code> a <code>close()</code>. (Jops, teď popisuji Firefox).</p><p>Výchozí vzhled dialog elementu opravdu není nic moc a mám z toho pocit jisté nedomyšlenosti, ale stylovat jistě všichni umíme, a pokud chcete šetřit čas, jeden návrh ostylování je v příkladu.</p><details><summary>Úplně k zahození nejsou ani ukázky použití a stylování. Totiž jsou sestaveny <strong>s ohledem na přístupnost</strong>, používání bez myši jen s pomocí klávesnice je v tomto případě opravdu snadné. A díky focusu na obsah dialogu i hlasové čtečky budou dialogu rozumět.</summary><pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">dialog</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"my-lightbox"</span> <span class="hljs-attr">open</span> <span class="hljs-attr">role</span>=<span class="hljs-string">"alertdialog"</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">"add-delivery-address"</span> <span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">"delivery-address-description"</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">role</span>=<span class="hljs-string">"document"</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">"0"</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"add-delivery-address"</span>&gt;</span>Insert your Delivery address<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"delivery-address-description"</span>&gt;</span>
+			… imagine some form in here :)
+		<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-on</span>=<span class="hljs-string">"tap:my-lightbox.close"</span> <span class="hljs-attr">title</span>=<span class="hljs-string">"close dialog"</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dialog</span>&gt;</span>
+</code></pre><p>Od původního <code>&lt;dialog open&gt;…&lt;/dialog&gt;</code> už se to pořádně vzdálilo :) . Ale je potřeba si uvědomit že právě takovéto dynamické prvky jsou tím největším problémem pro asistenční technologie, bez nějakého toho řádku kódu navíc se neobjedou.</p><pre><code class="language-javascript"><span class="hljs-keyword">const</span> button = <span class="hljs-built_in">document</span>.querySelector( <span class="hljs-string">'button'</span> );
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">document</span>.querySelector( <span class="hljs-string">'dialog'</span> );
+<span class="hljs-keyword">const</span> closingButton = <span class="hljs-built_in">document</span>.querySelector( <span class="hljs-string">'dialog&gt;button'</span> );
+<span class="hljs-keyword">const</span> KEYCODE_ESC = <span class="hljs-number">27</span>;
+
+button.addEventListener( <span class="hljs-string">'click'</span>, () =&gt; {
+	<span class="hljs-keyword">if</span> ( dialog.open )
+	{
+		dialog.close();
+	} <span class="hljs-keyword">else</span>
+	{
+		dialog.show();
+	}
+}, <span class="hljs-literal">false</span> );
+
+dialog.addEventListener( <span class="hljs-string">'keyup'</span>, ( <span class="hljs-comment">/** @type {KeyboardEvent} */</span> event ) =&gt; {
+	<span class="hljs-keyword">if</span> ( event.keyCode === KEYCODE_ESC )
+	{
+		dialog.close();
+	}
+}, <span class="hljs-literal">false</span> );
+
+closingButton.addEventListener( <span class="hljs-string">'click'</span>, ( <span class="hljs-comment">/** @type {MouseEvent */</span> event ) =&gt; {
+	<span class="hljs-comment">/** @type {HTMLButtonElement} */</span>
+	<span class="hljs-keyword">const</span> button = event.target;
+
+	<span class="hljs-comment">/** @type {HTMLDialogElement} */</span>
+	<span class="hljs-keyword">const</span> dialog = button.parentNode;
+
+	dialog.close();
+}, <span class="hljs-literal">false</span> );
+</code></pre><p>Javascript je pak více než vypovídající, kromě základního <code>show()</code> a <code>close()</code> je tam i možnost zavřít otevřený a současně aktivní dialog <kbd>ESC</kbd> klávesou. Jinak by na ni jen sedal prach :) .</p></details><p>Pro polyfill je použit upravený <code>HTMLUnknownElement</code>, který prohlížeč používá pro neznámý element. Šlo by to samozřejmě řešit i jinak, například jako <a href="https://www.zdrojak.cz/clanky/custom-elements-v-praxi/">custom elements</a>, kde vzniká ale problém opačný a to kolize u prohlížečů, které již <code>dialog</code> implementovaný mají. A protože počítám s tím, že podpora jistě přijde do všech prohlížečů přijde mi raději nechat ty prohlížeče s podporou dělat jejich práci a ty co podporu nemají si prostě provedou ten kousek javascriptu.</p><h2 id="živá-ukázka">Živá ukázka</h2><dialog id="my-lightbox" role="alertdialog" aria-labelledby="add-delivery-address" aria-describedby="delivery-address-description"><div role="document" tabindex="0"><h3 id="add-delivery-address">Insert your Delivery address</h3><p id="delivery-address-description"> … imagine some form in here :) <br><br><em> Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br> Aliquam erat volutpat. Suspendisse sagittis ultrices augue.<br> Integer malesuada. Aliquam ornare wisi eu metus. Integer pellentesque quam vel velit.<br> Nunc dapibus tortor vel mi dapibus sollicitudin. </em></p><button type="button">yes</button> / <button type="button">no</button></div><button type="button" data-on="tap:my-lightbox.close" title="close dialog">x</button></dialog><p>Jasně, bez té by to nebylo ono, takže s chutí vypusťte <button type="button" id="dialog-starter">dialog tímto tlačítkem.</button></p><script src="https://iiic.dev/js/dialogicPolyfill.mjs?qatvav" type="module" crossorigin="anonymous" integrity="sha256-dHKuaxOuwurk+H26C/fMr3WGod+O7AgrhBQ6b80qc/w=" nonce=""></script><script type="module" nonce="">
+( () => { const button = document.getElementById( 'dialog-starter' ); const dialog = document.getElementById( 'my-lightbox' ); const closingButton = dialog.querySelector( 'button[title="close dialog"]' ); const KEYCODE_ESC = 27; button.addEventListener( 'click', () => { if ( dialog.open ) { dialog.close(); } else { dialog.show(); } }, false ); dialog.addEventListener( 'keyup', ( /** @type {KeyboardEvent} */ event ) => { if ( event.keyCode === KEYCODE_ESC ) { dialog.close(); } }, false ); closingButton.addEventListener( 'click', ( /** @type {MouseEvent */ event ) => { /** @type {HTMLButtonElement} */ const button = event.target; /** @type {HTMLDialogElement} */ const dialog = button.parentNode; dialog.close(); }, false ); } )();</script><h2 id="služby">Služby</h2><p>Tento polyfill je možné nasadit pomocí NPM.</p><p>Unpkg: <a href="https://unpkg.com/dialogic-polyfill">https://unpkg.com/dialogic-polyfill</a></p><p>NPM: <a href="https://www.npmjs.com/package/dialogic-polyfill">https://www.npmjs.com/package/dialogic-polyfill</a></p><h2 id="licence">Licence</h2><details><summary><strong>CC BY-SA 4.0</strong></summary><p>This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a> or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.</p></details><hr><p>Repositář na Githubu <a href="https://github.com/iiic/dialogic-polyfill">https://github.com/iiic/dialogic-polyfill</a></p></section><footer><div id="comments"></div><span itemprop="author" itemscope="" itemtype="https://schema.org/Person"><a href="../author/ic/" content="https://iiic.dev/author/ic/" itemprop="url identifier"><span itemprop="name" class="p-author">ic</span></a></span><br><br><strong>Přečtěte si také:</strong><br><a title="předchozí článek" rel="prev" href="../svoboda-pro-port-80-na-windows-10/"><strong>⏴&nbsp;Svoboda pro port 80 (na Windows 10)</strong></a><a title="následující článek" rel="next" href="../uzamknete-webove-formulare-po-odeslani/"><strong>⏵&nbsp;Uzamkněte webové formuláře po odeslání :)</strong></a><p title="Jazyk ve kterém je psán článek" hidden="">V jazyce: <span itemprop="inLanguage" property="inLanguage" content="cs-CZ">čeština</span></p><p title="Je tento článek dostupný zdarma?" hidden="">Dostupnost článku<span itemprop="isAccessibleForFree" content="True">zdarma</span></p><p title="Počet slov článku" hidden="">Počet slov: <span itemprop="wordCount">685</span></p></footer><meta itemprop="accessMode" content="textual visual"><meta itemprop="accessibilityAPI" content="ARIA"><meta itemprop="accessibilityControl" content="fullKeyboardControl fullMouseControl fullTouchControl"><meta itemprop="creativeWorkStatus" content="publish"></article><hr><aside itemscope="" itemtype="https://schema.org/WPSideBar"><div id="style_switch-5" class="widget_style_switch"><script id="styleSwitchSettings" type="application/json">
+{"texts":{"caption":"Barevn\u00e9 sch\u00e9ma","nakedStyleCaption":"Bez stylu (\u010dist\u00e9 HTML)","switch":{"stateOnCaption":"Tmav\u00fd","stateOffCaption":"Sv\u011btl\u00fd"}},"resultSnippetAppearance":{"outputFormat":"switch","switch":{"useRolesAsTitle":false,"labelClassName":"style-switch-toggle"},"select":{"useRoleAsOptionTitle":false},"radioList":{"useRoleAsItemTitle":false}}}
+</script>
+<style-switch></style-switch></div><div id="notific-root" hidden=""></div></aside></div></main><hr><footer id="footer"><small class="watermark">iiic.dev</small><div class="★ wp-block-columns" itemscope="" itemtype="https://schema.org/WPFooter"><div class="wp-block-column"><div id="block-5" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Archivy</h2><ul class="wp-block-archives-list wp-block-archives">	<li><a href="../2020/12/">Prosinec 2020</a></li>
+	<li><a href="../2020/05/">Květen 2020</a></li>
+	<li><a href="../2020/04/">Duben 2020</a></li>
+	<li><a href="../2020/01/">Leden 2020</a></li>
+	<li><a href="../2019/10/">Říjen 2019</a></li>
+	<li><a href="../2019/09/">Září 2019</a></li>
+	<li><a href="../2019/05/">Květen 2019</a></li>
+	<li><a href="../2014/05/">Květen 2014</a></li>
+</ul></div></div></div><div id="block-6" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Rubriky</h2><ul class="wp-block-categories-list wp-block-categories-taxonomy-category wp-block-categories">	<li class="cat-item cat-item-1"><a href="../category/nezarazene/">Nezařazené</a>
+</li>
+</ul></div></div></div><p hidden="">Url: <a href="./" itemprop="url">https://iiic.dev/javascript-dialog-stylovani-a-polyfill/</a></p><p hidden="">Verze schématu: <a href="https://schema.org/docs/releases.html#v12.0" itemprop="schemaVersion">12.0</a></p><meta itemprop="accessMode" content="textual visual"><meta itemprop="accessibilityAPI" content="ARIA"><meta itemprop="accessibilityControl" content="fullKeyboardControl fullMouseControl fullTouchControl"></div><a href="#top" id="scroll-to-top" hidden=""><i title="nahorů">⮝</i></a></div><script type="module">
+		const link7e20ef02=document.createElement("link");
+		link7e20ef02.setAttribute("rel", "stylesheet");
+		link7e20ef02.href="/wp-content/themes/domdocument-template/css/main-all-async.css";
+		document.head.appendChild(link7e20ef02);
+	</script><script type="text/json" id="notific-settings">{"CSSStyleSheets":[{"href":"\/wp-content\/themes\/domdocument-template\/css\/notific.css","integrity":"sha256-DErgeoS4SQg0UMgS8E4mhJbyqNPHbyooBGsPqlRQviw="}],"modulesImportPath":"\/wp-content\/themes\/domdocument-template\/js\/modules"}</script><script src="../wp-content/themes/domdocument-template/js/modules/notific.mjs?v=0.3" type="module" crossorigin="anonymous"></script><script src="../wp-content/themes/domdocument-template/js/modules/common.mjs?v=0.11" type="module" crossorigin="anonymous"></script><script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/domdocument-template/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script><script id="style-switch-cookie-listener-js-module" src="../wp-content/plugins/style-switch/assets/js/style-switch-cookie-listener-example.js?ver=1.4.2" type="module"></script><script id="style-switch-js-module" src="../wp-content/plugins/style-switch/assets/js/style-switch.mjs?ver=1.4.2" type="module"></script></footer>
+</body></html>

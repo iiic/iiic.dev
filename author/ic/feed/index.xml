@@ -8,7 +8,7 @@
 	>
 
 <channel>
-	<title>ic &#8211; wordpress</title>
+	<title>ic &#8211; iiic.dev</title>
 	<atom:link href="https://iiic.dev/author/ic/feed/index.xml" rel="self" type="application/rss+xml" />
 	<link>https://iiic.dev/</link>
 	<description></description>
@@ -402,8 +402,8 @@
 			</item>
 		<item>
 		<title>Uzamkněte webové formuláře po odeslání :)</title>
-		<link>https://iiic.dev/uzamkn-te-webov-formul-e-po-odesl-n/</link>
-					<comments>https://iiic.dev/uzamkn-te-webov-formul-e-po-odesl-n/#respond</comments>
+		<link>https://iiic.dev/uzamknete-webove-formulare-po-odeslani/</link>
+					<comments>https://iiic.dev/uzamknete-webove-formulare-po-odeslani/#respond</comments>
 		
 		<dc:creator><![CDATA[ic]]></dc:creator>
 		<pubDate>Thu, 10 Oct 2019 17:27:00 +0000</pubDate>
@@ -448,15 +448,15 @@ form.elements['wpName'].value='cizíUživatelskéJméno';
 <link rel="stylesheet" href="/css/special-article-persistent-light-async.min.css?qm5fmp" crossorigin="anonymous" integrity="sha256-5GxflavITHGYMw7t6lbfVbLPvoOxzQGsUgSkY28nCik=" nonce="ixd390aeddf2dff2dc07c818192b78fc57zO">
 ]]></content:encoded>
 					
-					<wfw:commentRss>https://iiic.dev/uzamkn-te-webov-formul-e-po-odesl-n/feed/index.xml</wfw:commentRss>
+					<wfw:commentRss>https://iiic.dev/uzamknete-webove-formulare-po-odeslani/feed/index.xml</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		
 			</item>
 		<item>
 		<title>Javascript dialog stylování a polyfill</title>
-		<link>https://iiic.dev/javascript-dialog-stylov-n-a-polyfill/</link>
-					<comments>https://iiic.dev/javascript-dialog-stylov-n-a-polyfill/#respond</comments>
+		<link>https://iiic.dev/javascript-dialog-stylovani-a-polyfill/</link>
+					<comments>https://iiic.dev/javascript-dialog-stylovani-a-polyfill/#respond</comments>
 		
 		<dc:creator><![CDATA[ic]]></dc:creator>
 		<pubDate>Wed, 11 Sep 2019 01:31:16 +0000</pubDate>
@@ -549,7 +549,7 @@ closingButton.addEventListener( <span class="hljs-string">'click'</span>, ( <spa
 <p>Repositář na Githubu <a href="https://github.com/iiic/dialogic-polyfill">https://github.com/iiic/dialogic-polyfill</a></p>
 ]]></content:encoded>
 					
-					<wfw:commentRss>https://iiic.dev/javascript-dialog-stylov-n-a-polyfill/feed/index.xml</wfw:commentRss>
+					<wfw:commentRss>https://iiic.dev/javascript-dialog-stylovani-a-polyfill/feed/index.xml</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		
@@ -588,8 +588,8 @@ closingButton.addEventListener( <span class="hljs-string">'click'</span>, ( <spa
 			</item>
 		<item>
 		<title>Neznámá must-have aplikace pro Android?</title>
-		<link>https://iiic.dev/nezn-m-must-have-aplikace-pro-android/</link>
-					<comments>https://iiic.dev/nezn-m-must-have-aplikace-pro-android/#respond</comments>
+		<link>https://iiic.dev/neznama-must-have-aplikace-pro-android/</link>
+					<comments>https://iiic.dev/neznama-must-have-aplikace-pro-android/#respond</comments>
 		
 		<dc:creator><![CDATA[ic]]></dc:creator>
 		<pubDate>Wed, 07 May 2014 18:27:00 +0000</pubDate>
@@ -624,7 +624,7 @@ closingButton.addEventListener( <span class="hljs-string">'click'</span>, ( <spa
 </ol>
 ]]></content:encoded>
 					
-					<wfw:commentRss>https://iiic.dev/nezn-m-must-have-aplikace-pro-android/feed/index.xml</wfw:commentRss>
+					<wfw:commentRss>https://iiic.dev/neznama-must-have-aplikace-pro-android/feed/index.xml</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		

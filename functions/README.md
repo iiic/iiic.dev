@@ -28,17 +28,20 @@ Potřeba je účet na Cloudflare (stačí bezplatný tarif) a Node.js 22+. Pří
 3. Projekt Pages: `npx wrangler@4.168.0 pages project create <název> --production-branch main` (název = malá
    písmena, číslice a pomlčky; web pak běží i na `https://<název>.pages.dev`). Produkční větev musí být výchozí větev
    tohoto repozitáře.
-4. Ve WordPressu: Nastavení → Standalone template parts & options → **Cloudflare Pages: název projektu** a
-   **Cloudflare D1: ID databáze**, uložit a spustit export („Vygenerovat statické soubory“). Export vytvoří
-   `wrangler.toml` a workflow začne nasazovat na Cloudflare.
+4. Ve WordPressu: Nastavení → Standalone template parts & options → sekce „Statický export – hosting“:
+   **Hosting statického webu** = jedna z možností „GitHub + Cloudflare“ ([2026-11-25]; s „Jen GitHub“ export složky
+   `functions/` a `migrations/` do repozitáře vůbec nedá), **Cloudflare Pages: název projektu** a **Cloudflare D1: ID
+   databáze**, uložit a spustit export („Vygenerovat statické soubory“). Export vytvoří `wrangler.toml`
+   a `.github/hosting.env` a workflow začne nasazovat na Cloudflare.
 5. Na GitHubu v tomto repozitáři: Settings → Secrets and variables → Actions → **Secrets**:
    - `CLOUDFLARE_ACCOUNT_ID` – ID účtu (dash.cloudflare.com, pravý panel přehledu účtu, nebo `npx wrangler whoami`),
    - `CLOUDFLARE_API_TOKEN` – token z My Profile → API Tokens → Create Token → Custom token s oprávněními
      **Account → Cloudflare Pages → Edit** a **Account → D1 → Edit**.
 6. Vlastní doména: v projektu Pages → Custom domains přidat doménu webu (DNS záznam vytvoří Cloudflare, je-li doména
    u něj, jinak CNAME na `<název>.pages.dev`).
-7. Když web poběží celý na Cloudflare Pages, vypnout zveřejňování na GitHub Pages: Settings → Secrets and variables →
-   Actions → **Variables** → `DDT_GITHUB_PAGES` = `false` (a v Settings → Pages ho zrušit).
+7. Když web poběží celý na Cloudflare Pages (hosting „web i API na Cloudflare Pages“), workflow na GitHub Pages
+   nenasazuje ([2026-11-25] dříve to vypínala proměnná repozitáře `DDT_GITHUB_PAGES`, už se nečte). V Settings → Pages
+   repozitáře GitHub Pages zrušit, jinak tam zůstane poslední zveřejněná verze.
 8. Přihlášení do WordPressu – viz další sekce.
 
 Workflow (`.github/workflows/site-checks.yml`) po úspěšných kontrolách na výchozí větvi spustí migrace databáze
@@ -46,9 +49,10 @@ Workflow (`.github/workflows/site-checks.yml`) po úspěšných kontrolách na v
 a funkce ze složky `functions/`. Bez tajných hodnot nebo bez ID databáze skončí úloha chybou s popisem.
 
 **API jinde než web:** web může zůstat na GitHub Pages a API běžet jen na Cloudflare, např. na `auth.example.cz` (vlastní
-doména projektu Pages, stejná doména jako web – jinak prohlížeč cookie relace nepošle). Pak ve WordPressu vyplnit
-„Přihlášení přístupovým klíčem: adresa API“ (`https://auth.example.cz/api/auth/`) a v projektu Pages nastavit proměnné
-`RP_ID=example.cz` a `ALLOWED_ORIGINS=https://example.cz` (viz níže).
+doména projektu Pages, stejná doména jako web – jinak prohlížeč cookie relace nepošle). Pak ve WordPressu zvolit hosting
+„GitHub + Cloudflare – web na GitHub Pages, API na Cloudflare Pages“ ([2026-11-25]; workflow pak nasazuje na obojí),
+vyplnit „Přihlášení přístupovým klíčem: adresa API“ (`https://auth.example.cz/api/auth/` – s tímto hostingem povinně
+celou adresou) a v projektu Pages nastavit proměnné `RP_ID=example.cz` a `ALLOWED_ORIGINS=https://example.cz` (viz níže).
 
 ## Přihlášení do WordPressu (jeden účet všude)
 

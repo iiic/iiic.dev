@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="cs" dir="ltr"><head><meta charset="UTF-8"><title>Uzamkněte webové formuláře po odeslání :) – iiic.dev</title><link rel="preload" href="../wp-content/themes/domdocument-template/fonts/rubik/rubik-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="../wp-content/themes/domdocument-template/fonts/rubik/rubik-latin-ext.woff2" as="font" type="font/woff2" crossorigin="anonymous"><meta name="robots" content="max-image-preview:large"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS zdroj" href="https://iiic.dev/feed/index.xml"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS komentářů" href="https://iiic.dev/comments/feed/index.xml"><link rel="alternate" type="application/rss+xml" title="iiic.dev » RSS komentářů pro Uzamkněte webové formuláře po odeslání :)" href="https://iiic.dev/uzamknete-webove-formulare-po-odeslani/feed/index.xml"><style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style><link rel="stylesheet" href="../wp-content/ddt-shared-styles/wp-block-library-inline-css.b04f0ba1fb7a.css" integrity="sha384-H3kkB6MrLiwNpFGCzO8jpWCIig8V+RkN8eoWddeDxA6n0XH0OnINLsWdKX0NNBv0" crossorigin="anonymous" id="wp-block-library-inline-css">
+<style id="wp-block-archives-inline-css">
+.wp-block-archives{box-sizing:border-box}.wp-block-archives-dropdown label{display:block}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/archives/style.min.css */
+</style>
+<style id="wp-block-categories-inline-css">
+.wp-block-categories{box-sizing:border-box}.wp-block-categories.alignleft{margin-right:2em}.wp-block-categories.alignright{margin-left:2em}.wp-block-categories.wp-block-categories-dropdown.aligncenter{text-align:center}.wp-block-categories .wp-block-categories__label:not(.screen-reader-text){display:block;width:100%}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/categories/style.min.css */
+</style>
+<link rel="stylesheet" href="../wp-content/ddt-shared-styles/wp-block-heading-inline-css.e39643130fa2.css" integrity="sha384-O3MvMu8hqOm85smXI5FvRESIKhTbCGcmRdl/TW07RQPIBXlHCyuZAOiJ4jYnduAa" crossorigin="anonymous" id="wp-block-heading-inline-css">
+<style id="wp-block-group-inline-css">
+.wp-block-group{box-sizing:border-box}:where(.wp-block-group.wp-block-group-is-layout-constrained){position:relative}
+/*# sourceURL=https://iiic.dev/wp-includes/blocks/group/style.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style><link rel="stylesheet" href="../wp-content/ddt-shared-styles/global-styles-inline-css.a078d96d756d.css" integrity="sha384-9yEEa0kQig424AK2wrxjg7FAIBEZScxbpwRA0yUd1ZHlyePB9vpMs+8LDjStDASn" crossorigin="anonymous" id="global-styles-inline-css">
+<link rel="stylesheet" id="style-switch-persistent-css" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="alternate stylesheet" id="style-switch-style-light-css" title="Světlý" href="/wp-content/plugins/style-switch/assets/css/light.css"><link rel="stylesheet" id="style-switch-style-dark-css" title="Tmavý" href="/wp-content/plugins/style-switch/assets/css/dark.css" media="(prefers-color-scheme: dark)"><script data-settings="{&quot;cookie&quot;:&quot;stylesheets&quot;,&quot;ids&quot;:[&quot;style-switch-persistent-css&quot;,&quot;style-switch-style-light-css&quot;,&quot;style-switch-style-dark-css&quot;],&quot;naked&quot;:false,&quot;nakedDay&quot;:{&quot;month&quot;:4,&quot;day&quot;:9}}">
+( () => {
+	const script = document.currentScript;
+	let settings;
+	try {
+		settings = JSON.parse( script ? script.dataset.settings : '' );
+	} catch {
+		return;
+	}
+
+	const prefix = settings.cookie + '=';
+	const pair = document.cookie.split( ';' ).map( ( part ) => part.trim() ).find( ( part ) => part.startsWith( prefix ) );
+	if ( !pair ) {
+		return;
+	}
+	let cookie;
+	try {
+		cookie = JSON.parse( pair.slice( prefix.length ) ); // written by StyleSwitch, e.g. {"/&hellip;/dark.css":{"disabled":false},&hellip;}
+	} catch {
+		return;
+	}
+	if ( !cookie || typeof cookie !== 'object' ) {
+		return;
+	}
+
+	// The first enabled style sheet is the chosen one, '' is the page without CSS.
+	let chosen = null;
+	for ( const [ path, state ] of Object.entries( cookie ) ) {
+		if ( state && state.disabled === false ) {
+			if ( path !== '' ) {
+				chosen = path;
+			} else if ( settings.naked ) {
+				// The page without CSS set automatically for the CSS Naked Day ends with the day ( as in StyleSwitch ).
+				const today = new Date();
+				const isNakedDay = today.getMonth() + 1 === settings.nakedDay.month && today.getDate() === settings.nakedDay.day;
+				if ( !state.byNakedDay || isNakedDay ) {
+					chosen = path;
+				}
+			}
+			break;
+		}
+	}
+	if ( chosen === null ) {
+		return;
+	}
+
+	const links = settings.ids.map( ( id ) => document.getElementById( id ) ).filter( ( link ) => link instanceof HTMLLinkElement );
+	if ( chosen !== '' && !links.some( ( link ) => link.getAttribute( 'title' ) && link.getAttribute( 'href' ) === chosen ) ) {
+		return; // a style sheet the site does not offer ( any more )
+	}
+	for ( const link of links ) {
+		const title = link.getAttribute( 'title' );
+		if ( !title ) { // the default ( persistent ) style sheet, turned off only by the page without CSS
+			if ( chosen === '' ) {
+				link.setAttribute( 'disabled', '' );
+			}
+			continue;
+		}
+		if ( link.getAttribute( 'href' ) !== chosen ) {
+			link.setAttribute( 'disabled', '' );
+			continue;
+		}
+		// The chosen style sheet: hide the attributes which would stop the browser from using it.
+		if ( link.relList.contains( 'alternate' ) ) {
+			link.rel = 'stylesheet';
+			link.setAttribute( 'data-alternate', '' );
+		}
+		link.setAttribute( 'data-title', title );
+		link.removeAttribute( 'title' );
+		const media = link.getAttribute( 'media' );
+		if ( media ) {
+			link.setAttribute( 'data-media', media );
+			link.removeAttribute( 'media' );
+		}
+	}
+	if ( chosen === '' ) { // the page without CSS: also the other style sheets loaded so far, the cookie listener does the rest
+		for ( const link of document.querySelectorAll( 'link[rel=stylesheet]:not([title])' ) ) {
+			link.setAttribute( 'disabled', '' );
+		}
+	}
+} )();
+</script><link rel="stylesheet" id="style-switch-switch-css" href="../wp-content/plugins/style-switch/assets/css/switch.css?ver=1.0.0" media="all"><link rel="canonical" href="https://iiic.dev/uzamknete-webove-formulare-po-odeslani/"><link rel="stylesheet" href="../wp-content/ddt-shared-styles/style.b1b8f3c1eb50.css" integrity="sha384-T/9G/CWI5dsWCQKVMHq2OutGS9PSVOmeYn/p70kB/9bhFY2eDhV9Id5dK6R73hVo" crossorigin="anonymous" class="wp-fonts-local"><link rel="icon" href="../favicon.ico" sizes="32x32" type="image/x-icon"><link rel="manifest" href="../manifest.webmanifest"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><link rel="stylesheet" href="../wp-content/ddt-shared-styles/style.7fe669aac71b.css" integrity="sha384-B9FlN1RzauixV9xsbjRGlqwPiRX0IgBwL8SWMrXgnKIYQmIp9JD36Leriy0Eaxbs" crossorigin="anonymous"><link rel="stylesheet" href="../wp-content/themes/domdocument-template/css/main-all-persistent-critical.css?v5" integrity="sha256-LqxbZDi22cujVUA8s69PWRwURvFsZhuv1fjEFNKd74A=" crossorigin="anonymous"><link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet" crossorigin="anonymous"><script src="../wp-content/themes/domdocument-template/js/modules/navigatoruadata/isChrome.mjs" type="module" integrity="sha256-QURHFqjYGhatnn5EvveYDhD/3l6r4+CLtm04tx47/dU=" crossorigin="anonymous"></script><meta property="og:title" name="twitter:title" content="Uzamkněte webové formuláře po odeslání :)"><meta property="og:type" content="article"><meta property="og:url" content="https://iiic.dev/uzamknete-webove-formulare-po-odeslani/"><meta property="og:description" content="TL;DR verze V prohlížečích je zapnuté automatické vyplňování formulářů. Může uživateli uložit špatné hodnoty. Zvlášť v případě přihlášení když uloží špatné jméno/heslo je to velká nepříjemnost. Může se to stát snáze než si myslíte. A i zabránit tomu můžete snadno; Není moc scriptů u kterých by se dalo říct že jsou univerzální a jsou potřeba […]"><meta name="description" content="TL;DR verze V prohlížečích je zapnuté automatické vyplňování formulářů. Může uživateli uložit špatné hodnoty. Zvlášť v případě přihlášení když uloží špatné jméno/heslo je to velká nepříjemnost. Může se to stát snáze než si myslíte. A i zabránit tomu můžete snadno; Není moc scriptů u kterých by se dalo říct že jsou univerzální a jsou potřeba […]"></head><body class="single" style="--background-position: " itemscope="" itemtype="https://schema.org/WebPage"><header id="top" itemscope="" itemtype="https://schema.org/WPHeader"><nav class="★" aria-label="Hlavní menu"><strong class="banner"><a rel="home" href="../">iiic.dev</a></strong><hr><input type="checkbox" id="menu-status" hidden=""><label for="menu-status"><span title="ukaž menu!">[☰]</span><b>menu</b></label></nav></header><hr><main id="index" itemprop="mainContentOfPage"><section id="after-header"></section><div class="★"><article itemscope="" itemtype="https://schema.org/Article" id="post-275" class=" h-entry"><header><a title="trvalý odkaz na článek" itemprop="url mainEntityOfPage" href="./" class="u-url">#</a><h1 itemprop="headline name" class="p-name">Uzamkněte webové formuláře po odeslání :)</h1><time itemprop="datePublished" datetime="2019-10-10T19:27:00+02:00" class="dt-published" title="datum uveřejnění">10. 10. 2019 v 19:27</time><br><time itemprop="dateModified" datetime="2026-11-22T22:36:52+01:00" class="dt-updated" title="datum poslední úpravy" hidden="">22. 11. 2026 v 22:36</time><nav aria-label="Breadcrumb"><b hidden="">drobečková navigace</b><ol id="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="../"><span itemprop="name">Domů</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="./" aria-current="page"><span itemprop="name">Uzamkněte webové formuláře po odeslání :)</span></a><meta itemprop="position" content="2"></li></ol></nav></header><div id="categories"><strong hidden="">Rubriky</strong><ul><li class="p-category"><a href="../category/nezarazene/"><i>Nezařazené</i></a></li></ul></div><section itemprop="articleBody" class="e-content"><ul id="share-actions"><li id="share" title="Share: Sdílet prostřednictvím prohlížeče"><button type="button" disabled="">Share</button></li><li id="twitter" title="Twitter: Sdílet na Twitter"><a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fiiic.dev%2Fuzamknete-webove-formulare-po-odeslani%2F&amp;text=Uzamkn%C4%9Bte+webov%C3%A9+formul%C3%A1%C5%99e+po+odesl%C3%A1n%C3%AD+%3A%29&amp;hashtags=nezarazene" target="_blank"><i>Twitter</i></a></li><li id="facebook" title="Facebook: Sdílet na Facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fiiic.dev%2Fuzamknete-webove-formulare-po-odeslani%2F" target="_blank"><i>Facebook</i></a></li><li id="email" title="E-mail: Sdílet prostřednictvím emailu"><a href="mailto:?subject=Uzamkn%C4%9Bte+webov%C3%A9+formul%C3%A1%C5%99e+po+odesl%C3%A1n%C3%AD+%3A%29&amp;body=https%3A%2F%2Fiiic.dev%2Fuzamknete-webove-formulare-po-odeslani%2F" target="_blank"><i>E-mail</i></a></li></ul><ul id="print-and-epub"><li><button type="button" title="Tisk tohoto článku" id="print" disabled="">Tisk článku</button></li></ul><p><sup>TL;DR verze</sup> V prohlížečích je zapnuté automatické vyplňování formulářů. Může uživateli uložit špatné hodnoty. Zvlášť v případě přihlášení když uloží špatné jméno/heslo je to velká nepříjemnost. Může se to stát snáze než si myslíte. A i zabránit tomu můžete snadno;</p><p>Není moc scriptů u kterých by se dalo říct že jsou univerzální a jsou potřeba na každém webu. Spousta lidí vám řekne že na webu nejsou potřeba žádné javascripty. No a já vás zkusím přesvědčit že jsou. Roky byl hezkým příkladem byl script který otevíral obrázky vložené do stránky metodou přetažení (drag&amp;drop) na místo kde k tomu není dropzone a obslužný javascript. Co to udělalo? No přepsalo aktuální stránku obrázkem. Takže jste přišli o uživatele. Vrátí se? Možná ano, možná ne.</p><p>Naštěstí rok 2020 přinesl kromě <span lang="en">lockdown</span>u i změnu ve fungování prohlížečů. Stejnou situaci, tedy přetažení obrázků do okna prohlížeče na stránku nyní řeší prohlížeče otevřením v novém okně. Tedy už netřeba scriptu který přesně tohle udělá.</p><h2>To ale není konec, že?</h2><p>Nope… samozřejmě. Je tu další podobný kandidát, tentokrát řešící problém s formuláři. Totiž prohlížeče mají ve výchozím stavu našeptávání formulářů. Podle mě asi největší mor dnešní doby, čítá to takových problémů. Na jeden se hned podíváme.</p><h2>Tak rovnou k podstatě problému</h2><p><strong lang="en">Claim</strong>: Uživatel se přihlašuje, napíše jméno heslo, odpálí to enterem. Přihlášení je úspěšné, prohlížeč vybídne uživatele k uložení přihlašovacích údajů. Uživatel je uloží a při příštím pokusu o přihlášení je už prohlížeč předepíše do přihlašovacího formuláře… jenže přihlášení nefunguje. V prohlížeči uložené přihlašovací údaje jsou chybné.</p><h3>Jak je to vůbec možné, vždyť výzvu k uložení přihlašovacích údajů prohlížeč zobrazí teprve po úspěšném přihlášení</h3><strong>Navíc tohle se mi nikdy nestalo! To musí být nějaká blbost</strong><p>Problém je to trochu atomický, ne skutečně atomický, ale v tom smyslu, že se stane se v 1 z mnoha set pokusů a o to hůře se pak přichází na to kdy a co a proč.</p><p><strong>Jde o situaci, kdy uživatel napíše jméno/heslo začne odesílání formuláře jenže pak napíše ještě byť jen jediný znak.</strong><br>Ten krátký čas mezi začátkem odeslání formuláře a dokončením odeslání formuláře (jak bývá dobrým zvykem po POST požadavku … načtení jiné stránky) stačí na to aby se stal průšvih.</p><p>Chrome uživateli uloží i ty chybné hodnoty napsané po odeslání formuláře. Na server dorazí jméno a heslo správné, uloží se špatné doplněné o znaky napsané po odeslání formuláře. Pokud uživatel píše rychle a používá enter, může se mu stát že přesně do tohoto stavu se dopracuje.</p><p>Majitel webu by s tím samozřejmě mohl něco dělat… po odeslání formuláře ho nastavit celý readonly. Což vás postaví před další problémy, typicky pomalý server nebo pomalé internetové připojení uživatele a občasná potřeba odeslat formulář znovu.<br> Ale od čeho jsou problémy? Přece aby se řešily.</p><h2>Pojďme tohle tvrzení dokázat</h2><h3>Tak příklad v praxi na … Wikipedii</h3><p>Malý kousek kódu to snadno prokáže. A vyzkoušíme to na nějakém webu, který zná každý a budu rád jestli tam má každý i účet (nemá, ale je to škoda :) ). Wikipedie, tam se můžete přihlásit (do české verze) na nehezké URL adrese : <a href="https://cs.wikipedia.org/w/index.php?title=Speci%C3%A1ln%C3%AD:P%C5%99ihl%C3%A1sit">https://cs.wikipedia.org/w/index.php?title=Speciální:Přihlásit</a> . A tam spusťte tento kousek kódu:</p><pre><code class="language-javascript">(()=&gt;{
+const form = document.querySelector('form[name="userlogin"]');
+form.elements['wpName'].value='mojeUživatelskéJméno';
+form.elements['wpPassword'].value='mojeHeslo';
+form.submit();
+form.elements['wpName'].value='cizíUživatelskéJméno';
+})();
+</code></pre><p>(Článek je určen pro alespoň mírně pokročilé uživatel, kde předpokládám že dokáže spustit script, změnit přihlašovací údaje z ukázkových na vlastní a že ji povšimnou toho že tento script neunáší jméno a heslo někam jinam. Uživatelům co se v javascriptu nevyznají bych nikdy nedoporučoval spouště na stránce nějaké scripty kterým nerozumí. To je průšvih, dá se tak přijít o účet.)</p><p><strong>Jak vidíte script vyplní jméno a heslo a odešle formulář a poté hned změní hodnotu uživatelského jména na jiné. Co vám nabídne k uložení prohlížeč? Nabídne hodnotu vloženou po odeslání formuláře, ovšem na Wiki se přihlásíte s hodnotou před odesláním. Ops.</strong></p><h2>Takže zamykat formuláře, udělal někdo už nějaký script co to zařídí?</h2><p>To netuším, zatím to nechám na každém programátorovi a jeho možnostech a schopnostech, pokud bude zájem jednou něco drobného spíchnu.</p><h3>A závěrem ještě trochu pomluvit automatické ukládání a vyplňování formulářů</h3><p>Totiž necháváte uživatele na nějaké stránce, třeba jejich profilu spouštět javascript? Však o nic nejde, je to jen jedna stránka a přihlašování je na samostatné jiné stránce, tak se nic nemůže stát. No to je velká chyba. Je to obrovský průšvih na jakékoliv stránce a může snadno vést k odcizení přihlašovacích údajů všech uživatelů. Prohlížeč totiž přihlašovací údaje vyzradí automaticky a kterékoliv stránce z dané domény. Demonstrovat a osobně vyzkoušet tento problém lze na <a href="https://senglehardt.com/demo/no_boundaries/loginmanager/index.html">https://senglehardt.com/demo/no_boundaries/loginmanager/index.html</a>. Do stránky napíšete libovolné přihlašovací údaje, ideálně falešné, stránka přijme cokoliv a prohlížeč vás klasicky vyzve k uložení. Pokud je uložíte následující jiná stránka je může přečíst… bez přihlašovacího formuláře samotného a zcela automaticky.</p><h3>Pokračujte:</h3><ol><li><a href="https://www.chriswrites.com/third-parties-are-tricking-your-browser-and-password-manager-into-leaking-personal-info/">https://www.chriswrites.com/third-parties-are-tricking-your-browser-and-password-manager-into-leaking-personal-info/</a></li></ol><link rel="stylesheet" href="/css/special-article-persistent-light-async.min.css?qm5fmp" crossorigin="anonymous" integrity="sha256-5GxflavITHGYMw7t6lbfVbLPvoOxzQGsUgSkY28nCik=" nonce="ixd390aeddf2dff2dc07c818192b78fc57zO"></section><footer><div id="comments"></div><span itemprop="author" itemscope="" itemtype="https://schema.org/Person"><a href="../author/ic/" content="https://iiic.dev/author/ic/" itemprop="url identifier"><span itemprop="name" class="p-author">ic</span></a></span><br><br><strong>Přečtěte si také:</strong><br><a title="předchozí článek" rel="prev" href="../javascript-dialog-stylovani-a-polyfill/"><strong>⏴&nbsp;Javascript dialog stylování a polyfill</strong></a><a title="následující článek" rel="next" href="../subresource-integrity-check-u-javascriptovych-modulu/"><strong>⏵&nbsp;Subresource integrity check u javascriptových modulů</strong></a><p title="Jazyk ve kterém je psán článek" hidden="">V jazyce: <span itemprop="inLanguage" property="inLanguage" content="cs-CZ">čeština</span></p><p title="Je tento článek dostupný zdarma?" hidden="">Dostupnost článku<span itemprop="isAccessibleForFree" content="True">zdarma</span></p><p title="Počet slov článku" hidden="">Počet slov: <span itemprop="wordCount">804</span></p></footer><meta itemprop="accessMode" content="textual visual"><meta itemprop="accessibilityAPI" content="ARIA"><meta itemprop="accessibilityControl" content="fullKeyboardControl fullMouseControl fullTouchControl"><meta itemprop="creativeWorkStatus" content="publish"></article><hr><aside itemscope="" itemtype="https://schema.org/WPSideBar"><div id="style_switch-5" class="widget_style_switch"><script id="styleSwitchSettings" type="application/json">
+{"texts":{"caption":"Barevn\u00e9 sch\u00e9ma","nakedStyleCaption":"Bez stylu (\u010dist\u00e9 HTML)","switch":{"stateOnCaption":"Tmav\u00fd","stateOffCaption":"Sv\u011btl\u00fd"}},"resultSnippetAppearance":{"outputFormat":"switch","switch":{"useRolesAsTitle":false,"labelClassName":"style-switch-toggle"},"select":{"useRoleAsOptionTitle":false},"radioList":{"useRoleAsItemTitle":false}}}
+</script>
+<style-switch></style-switch></div><div id="notific-root" hidden=""></div></aside></div></main><hr><footer id="footer"><small class="watermark">iiic.dev</small><div class="★ wp-block-columns" itemscope="" itemtype="https://schema.org/WPFooter"><div class="wp-block-column"><div id="block-5" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Archivy</h2><ul class="wp-block-archives-list wp-block-archives">	<li><a href="../2020/12/">Prosinec 2020</a></li>
+	<li><a href="../2020/05/">Květen 2020</a></li>
+	<li><a href="../2020/04/">Duben 2020</a></li>
+	<li><a href="../2020/01/">Leden 2020</a></li>
+	<li><a href="../2019/10/">Říjen 2019</a></li>
+	<li><a href="../2019/09/">Září 2019</a></li>
+	<li><a href="../2019/05/">Květen 2019</a></li>
+	<li><a href="../2014/05/">Květen 2014</a></li>
+</ul></div></div></div><div id="block-6" class="widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Rubriky</h2><ul class="wp-block-categories-list wp-block-categories-taxonomy-category wp-block-categories">	<li class="cat-item cat-item-1"><a href="../category/nezarazene/">Nezařazené</a>
+</li>
+</ul></div></div></div><p hidden="">Url: <a href="./" itemprop="url">https://iiic.dev/uzamknete-webove-formulare-po-odeslani/</a></p><p hidden="">Verze schématu: <a href="https://schema.org/docs/releases.html#v12.0" itemprop="schemaVersion">12.0</a></p><meta itemprop="accessMode" content="textual visual"><meta itemprop="accessibilityAPI" content="ARIA"><meta itemprop="accessibilityControl" content="fullKeyboardControl fullMouseControl fullTouchControl"></div><a href="#top" id="scroll-to-top" hidden=""><i title="nahorů">⮝</i></a></div><script type="module">
+		const link7e20ef02=document.createElement("link");
+		link7e20ef02.setAttribute("rel", "stylesheet");
+		link7e20ef02.href="/wp-content/themes/domdocument-template/css/main-all-async.css";
+		document.head.appendChild(link7e20ef02);
+	</script><script type="text/json" id="notific-settings">{"CSSStyleSheets":[{"href":"\/wp-content\/themes\/domdocument-template\/css\/notific.css","integrity":"sha256-DErgeoS4SQg0UMgS8E4mhJbyqNPHbyooBGsPqlRQviw="}],"modulesImportPath":"\/wp-content\/themes\/domdocument-template\/js\/modules"}</script><script src="../wp-content/themes/domdocument-template/js/modules/notific.mjs?v=0.3" type="module" crossorigin="anonymous"></script><script src="../wp-content/themes/domdocument-template/js/modules/common.mjs?v=0.11" type="module" crossorigin="anonymous"></script><script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/domdocument-template/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script><script id="style-switch-cookie-listener-js-module" src="../wp-content/plugins/style-switch/assets/js/style-switch-cookie-listener-example.js?ver=1.4.2" type="module"></script><script id="style-switch-js-module" src="../wp-content/plugins/style-switch/assets/js/style-switch.mjs?ver=1.4.2" type="module"></script></footer>
+</body></html>

@@ -6,6 +6,22 @@ if ( scrollButtonElement ) {
 	} );
 }
 
+// [2026-11-26] Tlačítko Tisk (components/print-and-epub.php, id \CSS\ELEMENT_IDS::PRINT_BUTTON). Tlačítka tisku a ePubu se
+// zapínají každé zvlášť a modul epub-from-element.mjs se načítá jen s tlačítkem ePub, proto tisk obsluhuje tento modul
+// (načítá se na každé stránce). V nastavení ePub modulu je togglePrintElementId prázdné, jinak by se tisk otevřel dvakrát.
+const printButtonElement = document.getElementById( 'print' );
+if ( printButtonElement ) {
+	printButtonElement.addEventListener( 'click', function ()
+	{
+		window.print();
+	}, {
+		capture: false,
+		once: false,
+		passive: true,
+	} );
+	printButtonElement.disabled = false;
+}
+
 const headerInnerElement = document.querySelector( 'body>header .★' );
 const mq = window.matchMedia( '(min-width: 992px)' );
 if ( headerInnerElement && mq.matches
@@ -130,8 +146,72 @@ if ( article && !location.search && location.pathname === '/' ) {
 	const H1_NODE_NAME = 'H1';
 	const READ_MORE_ID = 'read-more';
 
+	/**
+	 * [2026-11-25] Vejde se článek do zkráceného náhledu (CSS `article.collapsed` má `max-height`) celý? Pak „číst více“
+	 * nemá co odkrýt – tlačítko by jen změnilo adresu (krátký nejnovější článek, např. „demo: http auth v obrázku“).
+	 */
+	const isCutWhenCollapsed = function ()
+	{
+		article.classList.add( COLLAPSED_CLASS_NAME );
+		const isCut = article.scrollHeight > article.clientHeight;
+		article.classList.remove( COLLAPSED_CLASS_NAME );
+		return isCut;
+	};
+
+	/**
+	 * [2026-11-25] Statický web má v HTML relativní adresy platné pro úvodní stránku (`o-clanku/`, `wp-content/…`).
+	 * history.replaceState() změní adresu dokumentu, a tím i základ, ke kterému je prohlížeč dopočítává: odkazy, líně
+	 * načítané obrázky (`loading="lazy"`, `srcset`) ve zbytku článku a další soubory by pak mířily do složky článku
+	 * (`/clanek/o-clanku/`, `/clanek/wp-content/…` → 404). Před změnou adresy je proto přepíše na adresy od kořene.
+	 * Na WordPressu jsou adresy celé, tam se nic nezmění. Už načtené soubory (skripty, styly, rámce) se nepřepisují,
+	 * nová hodnota atributu by je načetla znovu.
+	 */
+	const pinRelativeUrls = function ()
+	{
+		const URL_ATTRIBUTE_NAMES = [ 'href', 'src', 'srcset', 'action', 'formaction', 'poster', 'cite' ];
+		const SRCSET_ATTRIBUTE_NAME = 'srcset';
+		const SKIPPED_ELEMENTS_SELECTOR = 'script, iframe, frame, embed, object, link[rel~="stylesheet" i]';
+		const NOT_RELATIVE_URL = /^(?:[a-z][a-z\d+.-]*:|\/|#|$)/i; // celá adresa (https:, mailto:, data:…), od kořene (/, //), jen kotva, prázdná
+		const SRCSET_CANDIDATE_URL = /(?<=^|,)(\s*)([^\s,]\S*?)(,*)(?=\s|$)/g; // adresa obrázku na začátku každé položky srcset
+		const baseUrl = document.baseURI;
+
+		const pinUrl = function ( /** @type {String} */ url )
+		{
+			if ( NOT_RELATIVE_URL.test( url ) ) {
+				return url;
+			}
+			const absoluteUrl = new URL( url, baseUrl );
+			return absoluteUrl.origin === location.origin ? absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash : absoluteUrl.href;
+		};
+
+		const elementsSelector = URL_ATTRIBUTE_NAMES.map( ( /** @type {String} */ name ) => '[' + name + ']' ).join( ',' );
+		const roots = [ document, ...[ ...document.querySelectorAll( 'template' ) ].map( ( { content } ) => content ) ];
+		roots.forEach( function ( /** @type {Document|DocumentFragment} */ root )
+		{
+			root.querySelectorAll( elementsSelector ).forEach( function ( /** @type {Element} */ element )
+			{
+				if ( element.matches( SKIPPED_ELEMENTS_SELECTOR ) ) {
+					return;
+				}
+				URL_ATTRIBUTE_NAMES.forEach( function ( /** @type {String} */ name )
+				{
+					const value = element.getAttribute( name );
+					if ( value === null ) {
+						return;
+					}
+					const pinnedValue = name === SRCSET_ATTRIBUTE_NAME
+						? value.replace( SRCSET_CANDIDATE_URL, ( match, space, url, commas ) => space + pinUrl( url ) + commas )
+						: pinUrl( value.trim() );
+					if ( pinnedValue !== value.trim() && pinnedValue !== value ) {
+						element.setAttribute( name, pinnedValue );
+					}
+				} );
+			} );
+		} );
+	};
+
 	const articleCanonical = article.querySelector( '[itemprop~="url"]' );
-	if ( articleCanonical ) {
+	if ( articleCanonical && isCutWhenCollapsed() ) { // [2026-11-25] jen když náhled článek opravdu zkrátí
 		const collapseElements = [];
 		const eventListenerOptions = {
 			capture: false,
@@ -144,6 +224,7 @@ if ( article && !location.search && location.pathname === '/' ) {
 			event.preventDefault();
 			event.stopPropagation();
 
+			pinRelativeUrls(); // [2026-11-25] před změnou adresy dokumentu, viz výše
 			window.history.replaceState( {}, document.title, articleCanonical.href );
 
 			article.classList.remove( COLLAPSED_CLASS_NAME );
@@ -152,7 +233,9 @@ if ( article && !location.search && location.pathname === '/' ) {
 			{
 				element.removeEventListener( CLICK_EVENT_TYPE, removeCollapsed, eventListenerOptions );
 				if ( element.nodeName === H1_NODE_NAME ) {
-					element.appendChild( element.lastElementChild.lastChild );
+					const titleAnchor = element.lastElementChild;
+					element.appendChild( titleAnchor.lastChild );
+					titleAnchor.remove(); // [2026-11-25] dříve v nadpisu zůstal prázdný odkaz <a href="…"></a>
 				} else if ( element.id === READ_MORE_ID ) {
 					element.parentElement.removeChild( element );
 				}
