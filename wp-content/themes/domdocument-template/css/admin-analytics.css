@@ -1,0 +1,269 @@
+/* [2026-11-27] Stránka Analytická data a widget „Analytická data“ na nástěnce: \FUNCTIONS\ANALYTICS ve functions.php,
+   admin-pages/analyticka-data.php, dashboard-widgets/analyticka-data.php, prvky vytváří js/modules/admin-analytics.mjs.
+   README „Analytická data“. Třídy: \CSS\CLASS_NAMES\ANALYTICS. Po změně přepočítat SRI v \VARS\ANALYTICS::STYLESHEET_INTEGRITY
+   a zvýšit verzi v \VARS\ANALYTICS::STYLESHEET (pravidlo 9).
+
+   Grafy: jedna řada = jedna barva (modrá administrace #2271b1, kontrast proti bílé ověřený validátorem palety), sloupce
+   nejvýš 24 px se zaobleným vrcholem a 2px mezerou, mřížka a osa vlasovou čarou, čísla v textových barvách. Administrace
+   WordPressu tmavý režim nemá, proto jen světlé hodnoty. V režimu vynucených barev (forced-colors) jsou sloupce a pruhy
+   v barvě textu. */
+
+.ddt-analytics {
+	--ddt-analytics-series: #2271b1;
+	--ddt-analytics-series-hover: #135e96;
+	--ddt-analytics-track: #d4e4f3; /* světlejší krok stejné modré (podklad pruhu) */
+	--ddt-analytics-ink: #1d2327;
+	--ddt-analytics-ink-secondary: #50575e;
+	--ddt-analytics-grid: #e7e7e7;
+	--ddt-analytics-baseline: #c2c2c2;
+	--ddt-analytics-surface: #fff;
+	--ddt-analytics-border: #dcdcde;
+	--ddt-analytics-up: #006c10; /* změna k lepšímu (s šipkou ▲, ne jen barvou) */
+	--ddt-analytics-down: #b32d2e; /* změna k horšímu (▼) */
+}
+
+.ddt-analytics code {
+	overflow-wrap: anywhere;
+}
+
+/* období a „Načíst znovu“ – jeden řádek nad všemi částmi */
+.ddt-analytics-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+	margin: 16px 0 8px;
+}
+
+.ddt-analytics-section {
+	margin-top: 28px;
+}
+.ddt-analytics-status {
+	margin: 4px 0 8px;
+	color: var(--ddt-analytics-ink-secondary);
+}
+/* načítání: předchozí obsah zůstane, jen ztlumený (žádný skok rozvržení) */
+[data-ddt-analytics].is-loading > [data-ddt-analytics-content] {
+	opacity: .55;
+	transition: opacity .2s;
+}
+.ddt-analytics .notice.inline {
+	margin: 8px 0;
+}
+#dashboard-widgets .ddt-analytics h3,
+.ddt-analytics h3 {
+	margin: 18px 0 8px;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+.ddt-analytics-note {
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 12px;
+	max-width: 60rem;
+}
+
+/* dlaždice s hlavními čísly */
+.ddt-analytics-tiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 12px;
+	margin: 8px 0 12px;
+}
+#dashboard-widgets .ddt-analytics-tiles {
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+.ddt-analytics-tile {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 10px 12px;
+	background: var(--ddt-analytics-surface);
+	border: 1px solid var(--ddt-analytics-border);
+	border-radius: 4px;
+}
+.ddt-analytics-tile-label {
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 13px;
+}
+.ddt-analytics-tile-value {
+	color: var(--ddt-analytics-ink);
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.2;
+}
+.ddt-analytics-tile-delta {
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 12px;
+}
+.ddt-analytics-tile-delta.is-up {
+	color: var(--ddt-analytics-up);
+}
+.ddt-analytics-tile-delta.is-down {
+	color: var(--ddt-analytics-down);
+}
+
+/* sloupcový graf po dnech */
+.ddt-analytics-chart {
+	position: relative;
+	max-width: 960px;
+	margin: 16px 0 4px;
+}
+.ddt-analytics-chart figcaption {
+	margin-bottom: 8px;
+	color: var(--ddt-analytics-ink);
+	font-weight: 600;
+}
+.ddt-analytics-chart-plot {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 180px auto;
+	column-gap: 8px;
+}
+.ddt-analytics-chart-axis {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin: -0.5em 0;
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 11px;
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+}
+.ddt-analytics-chart-bars {
+	display: flex;
+	align-items: stretch;
+	gap: 2px;
+	border-bottom: 1px solid var(--ddt-analytics-baseline);
+	/* vlasové čáry mřížky nahoře a v polovině (popisky osy vlevo) */
+	background:
+		linear-gradient(var(--ddt-analytics-grid), var(--ddt-analytics-grid)) top / 100% 1px no-repeat,
+		linear-gradient(var(--ddt-analytics-grid), var(--ddt-analytics-grid)) center / 100% 1px no-repeat;
+}
+.ddt-analytics-chart-bars > div {
+	display: flex;
+	flex: 1 1 0;
+	align-items: flex-end;
+	justify-content: center;
+	min-width: 1px;
+}
+.ddt-analytics-chart-bar {
+	display: block;
+	width: 100%;
+	max-width: 24px;
+	background: var(--ddt-analytics-series);
+	border-radius: 4px 4px 0 0;
+}
+.ddt-analytics-chart-bars > div:hover .ddt-analytics-chart-bar,
+.ddt-analytics-chart-bar:focus-visible {
+	background: var(--ddt-analytics-series-hover);
+}
+.ddt-analytics-chart-bar:focus-visible {
+	outline: 2px solid var(--ddt-analytics-series-hover);
+	outline-offset: 2px;
+}
+.ddt-analytics-chart-axis-x {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 4px;
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 11px;
+}
+.ddt-analytics-tooltip {
+	position: absolute;
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	padding: 4px 8px;
+	background: var(--ddt-analytics-surface);
+	border: 1px solid rgba(11, 11, 11, .1);
+	border-radius: 4px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 12px;
+	white-space: nowrap;
+	pointer-events: none;
+}
+.ddt-analytics-tooltip[hidden] {
+	display: none;
+}
+.ddt-analytics-tooltip strong {
+	color: var(--ddt-analytics-ink);
+	font-size: 14px;
+}
+
+/* seřazené vodorovné pruhy: název, pruh, číslo */
+.ddt-analytics-ranking {
+	max-width: 720px;
+	margin: 8px 0;
+	padding: 0;
+	list-style: none;
+}
+.ddt-analytics-ranking li {
+	display: grid;
+	grid-template-columns: minmax(0, 40%) 1fr auto;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 6px;
+}
+.ddt-analytics-ranking li > span:first-child {
+	overflow-wrap: anywhere;
+}
+.ddt-analytics-ranking li > span:nth-child(2) {
+	display: block;
+	height: 8px;
+	background: var(--ddt-analytics-track);
+	border-radius: 4px;
+}
+.ddt-analytics-ranking li > span:nth-child(2) > span {
+	display: block;
+	min-width: 2px;
+	height: 100%;
+	background: var(--ddt-analytics-series);
+	border-radius: 4px;
+}
+
+/* tabulky */
+.ddt-analytics-table {
+	max-width: 960px;
+	margin: 8px 0;
+}
+.ddt-analytics-table th,
+.ddt-analytics-table td {
+	vertical-align: top;
+}
+.ddt-analytics-number,
+.ddt-analytics-table th.ddt-analytics-number,
+.ddt-analytics-table td.ddt-analytics-number {
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+	white-space: nowrap;
+}
+.ddt-analytics details {
+	margin: 8px 0;
+}
+.ddt-analytics summary {
+	cursor: pointer;
+	color: #2271b1;
+}
+.ddt-analytics-badge {
+	display: inline-block;
+	padding: 0 6px;
+	border: 1px solid var(--ddt-analytics-border);
+	border-radius: 9px;
+	color: var(--ddt-analytics-ink-secondary);
+	font-size: 11px;
+	line-height: 16px;
+	white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+	.ddt-analytics-chart-bar,
+	.ddt-analytics-ranking li > span:nth-child(2) > span {
+		background: CanvasText;
+	}
+	.ddt-analytics-ranking li > span:nth-child(2) {
+		border: 1px solid CanvasText;
+		background: Canvas;
+	}
+}

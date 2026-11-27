@@ -15,6 +15,15 @@ stránku statického webu a podepsaný token (viz „Přihlášení do WordPress
 | `wrangler.toml` | projekt Cloudflare Pages a databáze D1 – **vytváří ho export** z nastavení WordPressu |
 | `.site-checks/webauthn.test.mjs`, `sso-token.test.mjs` | testy API (spouští je `check-site.php`, tedy hook před commitem i workflow) |
 | `.site-checks/sso-keygen.mjs` | vytvoří klíč pro tokeny WordPressu (soukromý pro Cloudflare, veřejný pro WordPress) |
+| `functions/api/dashboard.js`, `functions/_lib/dashboard.js` | [2026-11-27] `GET /api/dashboard` – údaje z Cloudflare pro widget „Cloudflare“ na nástěnce WordPressu (sekce „Údaje pro nástěnku WordPressu“ níže) |
+| `.site-checks/dashboard-api.test.mjs` | [2026-11-27] testy `/api/dashboard` (token WordPressu, CORS, odpověď s podvrženým API Cloudflare) |
+| `functions/api/dashboard/traffic.js`, `functions/_lib/dashboard-traffic.js` | [2026-11-27] `GET /api/dashboard/traffic` – HTTP provoz zóny vlastní domény pro widget „Cloudflare – provoz zóny“ (sekce „Údaje pro nástěnku WordPressu“ níže) |
+| `.site-checks/dashboard-traffic.test.mjs` | [2026-11-27] testy `/api/dashboard/traffic` (zóny podle domén, rozsahy podle tarifu, součty, bezpečnostní události) |
+| `functions/api/dashboard/referrers.js`, `functions/_lib/dashboard-referrers.js` | [2026-11-27] `GET /api/dashboard/referrers` – odkazující weby (HTTP požadavky zóny a Web Analytics) pro stránku Analytická data ve WordPressu |
+| `functions/api/dashboard/github.js`, `functions/_lib/dashboard-github.js` | [2026-11-27] `GET /api/dashboard/github` – provoz repozitáře na GitHubu (tajná proměnná `DASHBOARD_GITHUB_TOKEN`) pro stránku Analytická data |
+| `.site-checks/dashboard-referrers.test.mjs`, `.site-checks/dashboard-github.test.mjs` | [2026-11-27] testy obou tras (podvržené API Cloudflare a GitHubu) |
+| `functions/api/zone-settings.js`, `functions/_lib/zone-settings.js` | [2026-11-27] `GET` a `POST /api/zone-settings` – stav a změny voleb zóny Cloudflare pro nástroj „Nastavení Cloudflare“ ve WordPressu (sekce „Nastavení zóny z WordPressu“ níže) |
+| `.site-checks/zone-settings.test.mjs` | [2026-11-27] testy `/api/zone-settings` (token, povolené volby, zóna projektu, pravidla WAF, bot management, podvržené API Cloudflare) |
 
 Složky `functions/` a `migrations/` i soubory `.gitignore` a `wrangler.toml` pochází ze šablony
 (`static-export/repository/`, `wrangler.toml` z nastavení), každý export je přepíše – měnit je ve WordPressu.
@@ -115,6 +124,105 @@ změny přepíše) nebo lokálně v `.dev.vars`:
 | `RP_NAME` | `RP_ID` | název webu v dialogu přístupových klíčů (export ho vyplní názvem webu z WordPressu) |
 | `ALLOWED_ORIGINS` | – | další adresy (origin, oddělené čárkou), které smí API volat s cookie relace a do kterých smí API vydat token pro přihlášení (web WordPressu). Adresa, na které API běží, je povolená vždy |
 | `SSO_PRIVATE_KEY` | – | **tajná** proměnná: soukromý klíč Ed25519 (JWK) pro tokeny WordPressu. Bez něj přihlášení do WordPressu nejde, zbytek API funguje |
+| `DASHBOARD_API_TOKEN` | – | [2026-11-27] **tajná** proměnná: API token Cloudflare jen pro čtení pro `/api/dashboard` a `/api/dashboard/traffic` (sekce níže). Bez něj vrací `/api/dashboard` jen nastavení a databázi, `/api/dashboard/traffic` jen chybu |
+| `WORDPRESS_PUBLIC_KEY` | – | [2026-11-27] veřejný klíč Ed25519 WordPressu (base64url), kterým `/api/dashboard` ověřuje tokeny. **Zapisuje ho export** do `[vars]` ve `wrangler.toml` |
+| `ZONE_SETTINGS_API_TOKEN` | – | [2026-11-27] **tajná** proměnná: API token Cloudflare **s právem zápisu** pro `/api/zone-settings` (sekce „Nastavení zóny z WordPressu“). Bez něj nástroj ve WordPressu nic neukáže ani nezmění |
+
+## Údaje pro nástěnku WordPressu – [2026-11-27]
+
+`GET /api/dashboard` (`functions/api/dashboard.js`, logika `functions/_lib/dashboard.js`) dává widgetu **Cloudflare** na
+nástěnce WordPressu souhrn: nastavení na Cloudflare (bez tajných hodnot), databázi D1 přes vazbu `DB` (velikost, počty
+účtů, klíčů a relací, poslední migrace), projekt Pages s posledními nasazeními a jejich commity, čerpání limitů
+bezplatného tarifu od půlnoci UTC (požadavky Pages Functions a Workers, řádky D1, úložiště) a chyby za posledních 7 dní
+(Pages Functions podle stavu, D1 podle textu chyby – počet a poslední výskyt).
+
+- API Cloudflare (`api.cloudflare.com`) z prohlížeče volat nejde (nemá CORS) a WordPress během požadavku nic nestahuje.
+  API token proto zná jen tato funkce a prohlížeč administrátora jí posílá token podepsaný WordPressem (JWT EdDSA,
+  platnost 5 minut, `aud` = adresa funkce, `scope` = `ddt-dashboard`, v údajích účet, projekt a databáze z nastavení
+  WordPressu). Soukromý klíč WordPress odvozuje ze solí ve `wp-config.php`, veřejný zapisuje export do `wrangler.toml`.
+- Odpověď má `Access-Control-Allow-Origin: *` – bez cookies, bez platného tokenu vrátí jen chybu.
+- Část, která selže (chybí oprávnění, projekt neexistuje, datová sada není na tarifu), má místo dat
+  `{ error: { code, message } }`, ostatní části se vrátí. Údaje z API Cloudflare si instance funkce pamatuje 1 minutu.
+- Rozsah dotazů GraphQL Analytics API bere funkce z uzlu `settings` (co tarif účtu dovolí).
+
+`GET /api/dashboard/traffic` (`functions/api/dashboard/traffic.js`, logika `functions/_lib/dashboard-traffic.js`) dává
+widgetu **Cloudflare – provoz zóny** HTTP provoz zóny vlastní domény projektu: požadavky, přenesená data a podíl z cache
+za posledních 24 hodin a po dnech (7 dní podle UTC, `httpRequests1hGroups` a `httpRequests1dGroups` – přesné součty)
+a zablokované hrozby za 7 dní podle akce a ochrany s počtem a posledním výskytem (`firewallEventsAdaptive`; na
+bezplatném tarifu vzorky, nejvýš 1 000 nejnovějších událostí na zónu, bez IP adres a cest). Stejný token WordPressu,
+stejný `DASHBOARD_API_TOKEN`, stejné CORS. Zónu najde podle vlastních domén projektu (pole `zone_tag`) – provoz na
+`.pages.dev` Cloudflare jako provoz zóny nepočítá; víc zón sečte (nejvýš 5). Údaje platí pro celou zónu.
+[2026-11-27] Parametr `?days=` (1–31) změní počet dní tabulky po dnech – stránka Analytická data ve WordPressu chce 30.
+
+[2026-11-27] Pro stránku **Analytická data** ve WordPressu (ta údaje ukládá a skládá z nich historii po dnech; widgety
+nástěnky je berou od ní) jsou ještě dvě trasy se stejným tokenem WordPressu a CORS:
+
+- `GET /api/dashboard/referrers` (`functions/api/dashboard/referrers.js`, logika `functions/_lib/dashboard-referrers.js`)
+  – odkazující weby za posledních 30 dní (celé dny podle UTC, nebo kolik dovolí tarif): z HTTP požadavků zóny
+  (`httpRequestsAdaptiveGroups` – jen stránky od návštěvníků s hlavičkou Referer z jiného webu než vlastní domény
+  projektu; pole, která tarif nedovolí, podle `settings.availableFields` vynechá) a z Cloudflare Web Analytics
+  (`rumPageloadEventsAdaptiveGroups`, bez robotů; web najde v seznamu webů Web Analytics podle zóny nebo hostitele).
+  Po dnech a webech, k tomu celé adresy odkazů a cílové stránky. Odpověď si instance pamatuje 5 minut.
+- `GET /api/dashboard/github` (`functions/api/dashboard/github.js`, logika `functions/_lib/dashboard-github.js`) –
+  provoz repozitáře statického webu na github.com (ne webu na GitHub Pages – ten GitHub nepočítá): zobrazení
+  a klonování po dnech za 14 dní, odkud lidé na repozitář přišli, nejnavštěvovanější stránky, hvězdy, forky, sledující.
+  Repozitář („uživatel/název“) je v tokenu WordPressu (údaj `repository`), token GitHubu jen v tajné proměnné
+  `DASHBOARD_GITHUB_TOKEN`. Odpověď si instance pamatuje 5 minut.
+
+**Nastavení (jednou):**
+
+1. ID účtu do WordPressu: Nastavení → Standalone template parts & options → „Cloudflare: ID účtu“ (`npx
+   wrangler@4.168.0 whoami` ho vypíše).
+2. API token: My Profile → API Tokens → Create Token → Create Custom Token, oprávnění **Account → Account Analytics →
+   Read** a **Account → Cloudflare Pages → Read**, Account Resources = tento účet. (Ne token z GitHubu – ten smí měnit.)
+   Pro provoz zóny navíc **Zone → Analytics → Read** (a nepovinně **Zone → Zone → Read** – název a tarif zóny),
+   Zone Resources = zóna vlastní domény. Už vytvořený token jde upravit (Edit), jeho hodnota zůstane stejná.
+3. Tajná proměnná v projektu Pages: `npx wrangler@4.168.0 pages secret put DASHBOARD_API_TOKEN --project-name <projekt>`
+   (nebo Settings → Variables and Secrets → Add → Secret).
+4. Export z WordPressu (zapíše `WORDPRESS_PUBLIC_KEY`) a nasazení. Proměnné se projeví až v novém nasazení.
+5. [2026-11-27] Nepovinně pro Web Analytics na stránce Analytická data: zapnout Web Analytics pro doménu (Analytics &
+   Logs → Web Analytics) a tokenu z bodu 2 přidat **Account → Account Settings → Read** (seznam webů Web Analytics).
+6. [2026-11-27] Pro GitHub na stránce Analytická data: na GitHubu Settings → Developer settings → Fine-grained tokens →
+   Generate new token, Repository access = jen tento repozitář, Repository permissions → **Administration: Read-only**
+   (provoz repozitáře; Metadata: Read-only se přidá samo). Pak
+   `npx wrangler@4.168.0 pages secret put DASHBOARD_GITHUB_TOKEN --project-name <projekt>` a nové nasazení.
+
+Podrobně pro začátečníky: WordPress → Vzhled → About template → návod „Údaje z Cloudflare na nástěnce“.
+
+Lokálně: `npx wrangler@4.168.0 pages dev .` – `/api/dashboard` přijme jen token s `aud` = lokální adresa, bez
+`DASHBOARD_API_TOKEN` v `.dev.vars` vrátí jen nastavení a lokální databázi.
+
+## Nastavení zóny z WordPressu – [2026-11-27]
+
+`GET /api/zone-settings` a `POST /api/zone-settings` (`functions/api/zone-settings.js`, logika
+`functions/_lib/zone-settings.js`) používá nástroj **Nástroje → Nastavení Cloudflare** ve WordPressu: stav a přepínání
+voleb zóny vlastní domény projektu – režim Pod útokem, kontrola integrity prohlížeče, platnost ověření, Bot Fight Mode,
+blokování AI robotů, AI Labyrinth, vlastní pravidla WAF proti pingbackům (`ddt-block-pingback-verification`: User-Agent
+„verifying pingback from“, `ddt-block-xmlrpc`: `/xmlrpc.php` a `/wp-trackback.php`), vývojový režim, Always Online,
+vyčištění celé mezipaměti, HTTPS a TLS, Email Address Obfuscation, Rocket Loader, Hotlink Protection. Režim šifrování
+SSL/TLS jen čte.
+
+- `GET` s tokenem WordPressu (`scope` = `ddt-zone-settings`, token nástěnky tu neplatí) vrátí stav voleb ve všech
+  zónách vlastních domén projektu (zónu najde podle `zone_tag` domény, jako `/api/dashboard/traffic`). Bez paměti.
+- `POST` provede **jen změnu z tokenu** (`change = { zone, setting, value }`, tělo požadavku se nečte; token pro změnu
+  platí nejvýš 5 minut, WordPress dává 2). Funkce ji ověří proti svému seznamu `SETTINGS` (`security_level` = `off` ani
+  `ssl` nedovolí) a zkontroluje, že zóna patří vlastní doméně projektu. Vrátí hodnotu před změnou a po ní.
+- Pravidla WAF se při prvním zapnutí založí (sada fáze `http_request_firewall_custom` se vytvoří jen tehdy, když zóna
+  žádnou nemá – jinak se pravidlo přidá na konec), pak se jen zapínají a vypínají; výraz upravený v administraci
+  Cloudflare zůstane. Bezplatný tarif: 5 vlastních pravidel na zónu.
+- Bot management se mění PUT se všemi stávajícími poli bezplatného tarifu (`BOT_MANAGEMENT_FIELDS`).
+
+Nastavení (jednou):
+
+1. API token: My Profile → API Tokens → Create Token → Custom token (**jiný** než `DASHBOARD_API_TOKEN` – tento smí
+   měnit nastavení) s oprávněními **Account → Cloudflare Pages → Read**, **Zone → Zone → Read** (nepovinné – název
+   a tarif zóny), **Zone → Zone Settings → Edit**, **Zone → Zone WAF → Edit**, **Zone → Bot Management → Edit**,
+   **Zone → Cache Purge → Purge**; Account Resources = váš účet, Zone Resources = jen zóna domény webu.
+2. `npx wrangler@4.168.0 pages secret put ZONE_SETTINGS_API_TOKEN --project-name <projekt>` a nové nasazení.
+3. Ve WordPressu vyplněné ID účtu a projekt (jako pro nástěnku).
+
+Chybějící oprávnění se ukáže jen u voleb, kterých se týká. Podrobně: WordPress → Vzhled → About template → návod „Údaje
+z Cloudflare na nástěnce“, krok „Nastavení Cloudflare z WordPressu“.
 
 ## Jak to funguje
 

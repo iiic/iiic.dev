@@ -1,0 +1,121 @@
+/* [2026-11-26] Stránka Drobečková navigace (\FUNCTIONS\BREADCRUMBS\renderAdminPage() ve functions.php), README „Správa
+   drobečkové navigace“. Třídy: \CSS\CLASS_NAMES\BREADCRUMBS_ADMIN. Barvy z palety administrace WordPressu. Po změně
+   přepočítat SRI v \VARS\BREADCRUMBS::STYLESHEET_INTEGRITY a zvýšit verzi v \VARS\BREADCRUMBS::STYLESHEET (pravidlo 9). */
+
+.ddt-breadcrumbs {
+	max-width: 96rem;
+}
+.ddt-breadcrumbs > p,
+.ddt-breadcrumbs-help {
+	max-width: 60rem;
+	font-size: 14px;
+	line-height: 1.6;
+}
+.ddt-breadcrumbs-help {
+	list-style: disc;
+	padding-left: 1.5em;
+}
+.ddt-breadcrumbs form > p {
+	max-width: 60rem;
+}
+.ddt-breadcrumbs h3 {
+	margin: 1.6em 0 .5em;
+}
+
+/* typ stránky */
+.ddt-breadcrumbs-context {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	margin: 0 0 .5em;
+}
+.ddt-breadcrumbs-context > summary {
+	cursor: pointer;
+	padding: .7em 1em;
+	line-height: 1.8;
+}
+.ddt-breadcrumbs-context > summary:hover {
+	background: #f6f7f7;
+}
+.ddt-breadcrumbs-title {
+	font-weight: 600;
+	font-size: 14px;
+}
+.ddt-breadcrumbs-pattern {
+	margin-left: .8em;
+	font-size: 12px;
+}
+.ddt-breadcrumbs-context > summary .ddt-breadcrumbs-preview {
+	margin-left: .8em;
+	color: #50575e;
+}
+.ddt-breadcrumbs-context.is-disabled > summary .ddt-breadcrumbs-title {
+	color: #8c8f94;
+}
+.ddt-breadcrumbs-context > div {
+	padding: .2em 1em 1em;
+	border-top: 1px solid #f0f0f1;
+	overflow-x: auto; /* úzké okno: tabulka se posouvá, stránka zůstane */
+}
+.ddt-breadcrumbs-separator {
+	color: #8c8f94;
+}
+
+/* tabulka částí */
+.ddt-breadcrumbs-items {
+	margin: .5em 0;
+	min-width: 52rem;
+}
+.ddt-breadcrumbs-items th,
+.ddt-breadcrumbs-items td {
+	vertical-align: top;
+}
+.ddt-breadcrumbs-items th:first-child,
+.ddt-breadcrumbs-items td:first-child {
+	width: 5.5em;
+	white-space: nowrap;
+}
+.ddt-breadcrumbs-items th:nth-child(3),
+.ddt-breadcrumbs-items td:nth-child(3) {
+	width: 4.5em;
+	text-align: center;
+}
+.ddt-breadcrumbs-items td:nth-child(2) {
+	width: 30%;
+}
+.ddt-breadcrumbs-items tbody + tbody {
+	border-top: 1px solid #c3c4c7;
+}
+.ddt-breadcrumbs-items .is-fixed td {
+	background: #f6f7f7;
+	color: #50575e;
+}
+.ddt-breadcrumbs-items .is-custom td {
+	background: #f0f6fc;
+}
+.ddt-breadcrumbs-items .description {
+	margin: .3em 0 0;
+}
+.ddt-breadcrumbs-items input[type="text"],
+.ddt-breadcrumbs-link select {
+	width: 100%;
+	max-width: 24em;
+}
+.ddt-breadcrumbs-link > * {
+	display: block;
+	margin: 0 0 .3em;
+}
+.ddt-breadcrumbs-link > .hidden {
+	display: none;
+}
+.ddt-breadcrumbs-move {
+	display: inline-flex;
+	gap: .2em;
+}
+.ddt-breadcrumbs-move .button {
+	min-width: 2.2em;
+	padding: 0 .4em;
+}
+.ddt-breadcrumbs-warning {
+	color: #b32d2e;
+	margin: .3em 0 0;
+}

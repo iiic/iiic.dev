@@ -794,12 +794,16 @@ export const onRequest = async function ( /** @type {EventContext} */ context )
 	/** @type {Response} */
 	let response;
 
+	/** @type {Boolean} [2026-11-26] veřejná adresa (PUBLIC_ROUTES) – CORS pro všechny i u chybové odpovědi */
+	let isPublicRoute = false;
+
 	try {
 
 		/** @type {String[]} */
 		const segments = [ context.params.route ?? [] ].flat().filter( Boolean );
 
 		const { handler, allowed, id, isPublic } = findHandler( request.method, segments );
+		isPublicRoute = isPublic;
 
 		if ( !isPublic && origin !== null && !config.allowedOrigins.includes( origin ) ) {
 			throw new HttpError( 403, ERRORS.FORBIDDEN_ORIGIN, `Stránky z adresy ${ origin } toto API volat nesmí (ALLOWED_ORIGINS).` );
@@ -838,6 +842,13 @@ export const onRequest = async function ( /** @type {EventContext} */ context )
 	response = new Response( response.body, response ); // hlavičky odpovědi jde měnit jen u kopie
 	for ( const [ name, value ] of Object.entries( cors ) ) {
 		response.headers.set( name, value );
+	}
+	// [2026-11-26] Chybu veřejné adresy (např. chybějící SSO_PRIVATE_KEY u sso/public-key) smí přečíst kdokoli, stejně jako
+	// úspěšnou odpověď – ukazuje ji nástroj „Nasazení statického webu“ v administraci WordPressu. Dřív měla hlavičku CORS jen
+	// úspěšná odpověď a prohlížeč z jiné adresy viděl u chyby jen „Failed to fetch“. Nic tajného v chybě není (stejný text
+	// dostane každý požadavek bez Origin).
+	if ( isPublicRoute && !response.headers.has( 'Access-Control-Allow-Origin' ) ) {
+		response.headers.set( 'Access-Control-Allow-Origin', '*' );
 	}
 	response.headers.append( 'Vary', 'Origin' );
 	return response;

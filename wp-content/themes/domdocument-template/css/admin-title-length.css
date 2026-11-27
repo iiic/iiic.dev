@@ -1,0 +1,130 @@
+/*
+	[2026-11-27] Ukazatel délky titulku stránky (prvek <title>) v administraci – vkládá ho js/modules/admin-title-length.mjs,
+	README „Délka titulku v administraci“. Celá šířka ukazatele je \VARS\TITLE_LENGTH::SCALE znaků, svislá značka je doporučené
+	maximum (\VARS\DASHBOARD_WIDGET::TITLE_MAX_LENGTH). Modul nastavuje polohu jezdce (--ddt-title-length-position) a značky
+	(--ddt-title-length-limit), atribut data-over ukazatel nad maximem přebarví. Atribut data-place říká, kde ukazatel je:
+	panel (pravý panel blokového editoru pod názvem), rename (okno Přejmenovat), quick-edit (Rychlé úpravy ve výpisu),
+	[2026-11-27] classic (klasický editor produktů a organizací pod polem s názvem).
+*/
+
+.ddt-title-length {
+	--ddt-title-length-position: 0%;
+	--ddt-title-length-limit: 70%;
+	--ddt-title-length-color: var(--wp-admin-theme-color, #3858e9);
+	--ddt-title-length-track: #dcdcde;
+	--ddt-title-length-over-track: #f7d4d4;
+	--ddt-title-length-thumb: 12px;
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	height: 4px;
+	margin-block: 10px;
+	margin-inline: calc(var(--ddt-title-length-thumb) / 2);
+	border-radius: 2px;
+	background: linear-gradient(to right, var(--ddt-title-length-track) var(--ddt-title-length-limit), var(--ddt-title-length-over-track) var(--ddt-title-length-limit));
+}
+
+.ddt-title-length:dir(rtl) {
+	background: linear-gradient(to left, var(--ddt-title-length-track) var(--ddt-title-length-limit), var(--ddt-title-length-over-track) var(--ddt-title-length-limit));
+}
+
+.ddt-title-length[data-over] {
+	--ddt-title-length-color: #d63638;
+}
+
+/* vyplněná část až k jezdci */
+.ddt-title-length::before {
+	content: '';
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	width: var(--ddt-title-length-position);
+	border-radius: inherit;
+	background: var(--ddt-title-length-color);
+	transition: width .15s ease-out, background-color .15s;
+}
+
+/* značka doporučeného maxima */
+.ddt-title-length::after {
+	content: '';
+	position: absolute;
+	inset-block: -4px;
+	inset-inline-start: var(--ddt-title-length-limit);
+	width: 2px;
+	margin-inline-start: -1px;
+	border-radius: 1px;
+	background: #50575e;
+}
+
+/* jezdec */
+.ddt-title-length__thumb {
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	inset-inline-start: var(--ddt-title-length-position);
+	box-sizing: border-box;
+	width: var(--ddt-title-length-thumb);
+	height: var(--ddt-title-length-thumb);
+	margin-block-start: calc(var(--ddt-title-length-thumb) / -2);
+	margin-inline-start: calc(var(--ddt-title-length-thumb) / -2);
+	border: 2px solid var(--ddt-title-length-color);
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	transition: inset-inline-start .15s ease-out, border-color .15s;
+}
+
+/* pravý panel blokového editoru: pod názvem (ikona 24 px + mezera 8 px před ním), mezi položkami panelu je mezera 4 px */
+.ddt-title-length[data-place="panel"] {
+	margin-block: 6px 2px;
+	margin-inline-start: 32px;
+}
+
+/* okno Přejmenovat: hned pod polem Název */
+.ddt-title-length[data-place="rename"] {
+	margin-block: 12px 2px;
+}
+
+/* Rychlé úpravy: pod polem Název, zarovnaný s polem (popisek „Název“ má šířku 6em, pod 783 px je nad polem) */
+.ddt-title-length[data-place="quick-edit"] {
+	margin-block: 4px 12px;
+	margin-inline-start: calc(6em + var(--ddt-title-length-thumb) / 2);
+}
+
+/* [2026-11-27] klasický editor: pod polem s názvem (#titlewrap), nad odkazem na příspěvek */
+.ddt-title-length[data-place="classic"] {
+	margin-block: 10px 4px;
+}
+
+@media screen and (max-width: 782px) {
+	.ddt-title-length[data-place="quick-edit"] {
+		margin-inline-start: calc(var(--ddt-title-length-thumb) / 2);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ddt-title-length::before,
+	.ddt-title-length__thumb {
+		transition: none;
+	}
+}
+
+/* režim vysokého kontrastu: barvy pozadí systém zahodí, ukazatel kreslí systémovými barvami */
+@media (forced-colors: active) {
+	.ddt-title-length {
+		forced-color-adjust: none;
+		--ddt-title-length-color: Highlight;
+		--ddt-title-length-track: Canvas;
+		--ddt-title-length-over-track: Canvas;
+		outline: 1px solid CanvasText;
+	}
+	.ddt-title-length[data-over] {
+		--ddt-title-length-color: Mark;
+	}
+	.ddt-title-length::after {
+		background: CanvasText;
+	}
+	.ddt-title-length__thumb {
+		background: Canvas;
+	}
+}

@@ -7,6 +7,7 @@ compatibility_date = "2026-11-20"
 
 [vars]
 RP_NAME = "iiic.dev" # název webu v dialogu přístupových klíčů (další proměnné viz functions/README.md)
+WORDPRESS_PUBLIC_KEY = "qt7z3gGfpo1aHGGJQd-4YSs5tjuhefNoT8GGZ9WIqlM" # ověření tokenů widgetu „Cloudflare“ na nástěnce WordPressu (functions/_lib/dashboard.js)
 
 [[d1_databases]]
 binding = "DB"

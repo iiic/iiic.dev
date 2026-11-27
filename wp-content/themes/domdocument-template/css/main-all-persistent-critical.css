@@ -242,6 +242,23 @@ table tr:nth-child(even) {
   background-color: var(--color-accent);
 }
 
+/* [2026-11-26] Blok Tabulka (figure.wp-block-table): tabulka na šířku sloupce, text v buňkách se zalamuje.
+   Dříve figure (inline-block bez max-width) i table (inline-block + nowrap) roztáhly tabulku na celé řádky textu
+   (1446 px ve sloupci 884 px, na mobilu až 1717 px v 358 px) a přesah stránka ořízla. Sloupce jako v jádru
+   a editoru: „Pevná šířka buněk“ (has-fixed-layout) = stejně široké, jinak podle obsahu. Tabulky mimo blok
+   (starší obsah) mají dál vzhled výše. Viz README „Tabulky z bloku Tabulka přetékaly ze sloupce“. */
+figure.wp-block-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+figure.wp-block-table table {
+  display: table;
+  width: 100%;
+  white-space: normal;
+}
+
 .★ {
   position: relative;
   margin: auto;
@@ -662,7 +679,7 @@ nav[aria-label="Breadcrumb"] {
   margin: 1rem 0;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"] {
+[itemtype="https://schema.org/BreadcrumbList"] > li {
   position: relative;
   display: inline-block;
   font-size: medium;
@@ -673,7 +690,7 @@ nav[aria-label="Breadcrumb"] {
   transition: all 0.2s;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:before {
+[itemtype="https://schema.org/BreadcrumbList"] > li:before {
   content: '';
   left: 0;
   top: 0;
@@ -686,28 +703,29 @@ nav[aria-label="Breadcrumb"] {
   transition: all 0.2s;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:hover {
+[itemtype="https://schema.org/BreadcrumbList"] > li:hover {
   background: var(--color-secondary);
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:hover+ :before {
+[itemtype="https://schema.org/BreadcrumbList"] > li:hover+ :before {
   border-color: transparent transparent transparent var(--color-secondary);
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:first-child {
+[itemtype="https://schema.org/BreadcrumbList"] > li:first-child {
   border-radius: 0.4em 0 0 0.4em;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:first-child:before {
+[itemtype="https://schema.org/BreadcrumbList"] > li:first-child:before {
   display: none;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] [itemprop="itemListElement"]:last-child {
+[itemtype="https://schema.org/BreadcrumbList"] > li:last-child {
   padding-right: 1rem;
   border-radius: 0 0.4em 0.4em 0;
 }
 
-[itemtype="https://schema.org/BreadcrumbList"] a {
+[itemtype="https://schema.org/BreadcrumbList"] a,
+[itemtype="https://schema.org/BreadcrumbList"] li > span {
   color: var(--color-text);
   display: inline-block;
   text-decoration: none;

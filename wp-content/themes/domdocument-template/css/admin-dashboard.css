@@ -1,0 +1,334 @@
+/* [2026-11-26] Přehledy šablony na nástěnce (Statický web, Kontrola obsahu před exportem, Dokončení nastavení šablony;
+   [2026-11-27] Přehled obsahu, Kontrola SRI):
+   \FUNCTIONS\DASHBOARD ve functions.php, soubory dashboard-widgets/, README „Přehledy na nástěnce“. Třídy:
+   \CSS\CLASS_NAMES\DASHBOARD_WIDGET, barvy z palety administrace WordPressu. Po změně přepočítat SRI
+   v \VARS\DASHBOARD_WIDGET::STYLESHEET_INTEGRITY a zvýšit verzi v \VARS\DASHBOARD_WIDGET::STYLESHEET (pravidlo 9). */
+
+.ddt-dashboard > :first-child {
+	margin-top: 0;
+}
+.ddt-dashboard code {
+	overflow-wrap: anywhere; /* dlouhé cesty a adresy nesmí roztáhnout widget */
+	font-size: 12px;
+	padding: 0 2px;
+}
+.ddt-dashboard .notice.inline {
+	margin: 0 0 12px;
+}
+.ddt-dashboard .notice[hidden] {
+	display: none;
+}
+
+/* nadpis části widgetu (#dashboard-widgets – jádro má pro h3 na nástěnce pravidlo s id, bez něj by nadpis zůstal tenký a bez odstupu) */
+#dashboard-widgets .ddt-dashboard h3.ddt-dashboard-heading {
+	margin: 16px 0 8px;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+/* tabulka údajů */
+.ddt-dashboard-facts {
+	width: 100%;
+	border-collapse: collapse;
+}
+.ddt-dashboard-facts th,
+.ddt-dashboard-facts td {
+	padding: 4px 0;
+	vertical-align: top;
+	text-align: left;
+	border-bottom: 1px solid #f0f0f1;
+}
+.ddt-dashboard-facts th {
+	width: 32%;
+	padding-right: 10px;
+	font-weight: 600;
+}
+.ddt-dashboard-facts td {
+	overflow-wrap: anywhere;
+}
+.ddt-dashboard-facts .dashicons-external {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	vertical-align: -2px;
+}
+
+/* [2026-11-27] tabulka počtů (Přehled obsahu): řádek = jazyk / vzor, sloupce = typy obsahu */
+.ddt-dashboard-counts {
+	width: 100%;
+	border-collapse: collapse;
+}
+.ddt-dashboard-counts th,
+.ddt-dashboard-counts td {
+	padding: 4px 0;
+	vertical-align: top;
+	text-align: right;
+	border-bottom: 1px solid #f0f0f1;
+}
+.ddt-dashboard-counts th:first-child {
+	text-align: left;
+	overflow-wrap: anywhere;
+}
+.ddt-dashboard-counts thead th {
+	color: #646970;
+	font-weight: 400;
+}
+.ddt-dashboard-counts tbody th {
+	font-weight: 400;
+}
+.ddt-dashboard-counts td,
+.ddt-dashboard-counts thead th:not(:first-child) {
+	width: 5.5em;
+	padding-left: 10px;
+	font-variant-numeric: tabular-nums;
+}
+.ddt-dashboard-counts tfoot th,
+.ddt-dashboard-counts tfoot td {
+	font-weight: 600;
+	border-bottom: 0;
+}
+.ddt-dashboard-counts details {
+	margin-top: 2px;
+}
+.ddt-dashboard-counts .ddt-dashboard-note {
+	font-size: 12px;
+}
+
+/* seznam se stavem */
+.ddt-dashboard-items {
+	margin: 0;
+}
+.ddt-dashboard-items > li {
+	display: flex;
+	gap: 6px;
+	align-items: flex-start;
+	margin: 0 0 8px;
+	line-height: 1.5;
+}
+.ddt-dashboard-items > li > .dashicons {
+	flex: none;
+	margin-top: 1px;
+}
+.ddt-dashboard-items > li > span {
+	min-width: 0; /* dlouhý text se zalomí, ikona zůstane vlevo */
+}
+.ddt-dashboard .is-ok > .dashicons {
+	color: #00a32a;
+}
+.ddt-dashboard .is-warning > .dashicons {
+	color: #dba617;
+}
+.ddt-dashboard .is-error > .dashicons {
+	color: #d63638;
+}
+.ddt-dashboard .is-info > .dashicons {
+	color: #646970;
+}
+.ddt-dashboard-items .button {
+	min-height: 26px;
+	line-height: 2.18181818;
+	padding: 0 8px;
+	font-size: 11px;
+	vertical-align: baseline;
+}
+
+/* rozbalovací seznamy (které příspěvky, vypnuté volitelné funkce) */
+.ddt-dashboard details > summary {
+	cursor: pointer;
+	color: #2271b1;
+}
+.ddt-dashboard details > ul {
+	margin: 6px 0 0 1.4em;
+	list-style: disc;
+}
+.ddt-dashboard details > ul > li {
+	margin: 0 0 4px;
+}
+.ddt-dashboard > details {
+	margin-top: 12px;
+}
+.ddt-dashboard > details > summary {
+	font-weight: 600;
+}
+.ddt-dashboard > details > .ddt-dashboard-items {
+	margin-top: 8px;
+}
+
+/* vysvětlivka */
+.ddt-dashboard-note {
+	margin: 4px 0 0;
+	color: #646970;
+	font-size: 12px;
+}
+
+/* tlačítka */
+.ddt-dashboard-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin: 16px 0 0;
+}
+.ddt-dashboard-actions [hidden] {
+	display: none;
+}
+
+/* [2026-11-26] komentáře z externí služby (položky vytváří js/modules/admin-dashboard-comments.mjs) */
+.ddt-dashboard-comments {
+	margin: 0;
+}
+.ddt-dashboard-comments > li {
+	margin: 0;
+	padding: 8px 0 8px 10px;
+	border-left: 3px solid transparent;
+	border-bottom: 1px solid #f0f0f1;
+	line-height: 1.5;
+}
+.ddt-dashboard-comments > li:last-child {
+	border-bottom: 0;
+}
+.ddt-dashboard-comments > li.is-new {
+	border-left-color: #2271b1;
+	background: #f6f7f7;
+}
+.ddt-dashboard-comment-meta {
+	color: #646970;
+	font-size: 12px;
+}
+.ddt-dashboard-comment-meta .dashicons-external {
+	font-size: 13px;
+	width: 13px;
+	height: 13px;
+	vertical-align: -2px;
+}
+.ddt-dashboard-comment-excerpt {
+	margin-top: 2px;
+	overflow-wrap: anywhere;
+}
+.ddt-dashboard-badge {
+	display: inline-block;
+	padding: 0 6px;
+	border-radius: 9px;
+	background: #2271b1;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 18px;
+	vertical-align: 1px;
+}
+.ddt-dashboard p.notice {
+	padding: 8px 12px;
+}
+
+/* Hotovo x z y */
+.ddt-dashboard-progress {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 4px;
+	font-weight: 600;
+}
+.ddt-dashboard-progress progress {
+	flex: 1;
+	max-width: 14rem;
+	height: 8px;
+	accent-color: #00a32a;
+}
+
+/* [2026-11-27] widget „Cloudflare“ (prvky vytváří js/modules/admin-dashboard-cloudflare.mjs). Čerpání limitů: na řádku název
+   a číslo, pod nimi ukazatel na celou šířku (widget je úzký), pod ním podrobnosti. Výplň nese stav (modrá → žlutá → červená),
+   podklad je světlejší odstín téže barvy; stav je vždy i slovem s ikonou, ne jen barvou. */
+.ddt-dashboard-meters {
+	margin: 8px 0 0;
+}
+.ddt-dashboard-meters > li {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 3px 10px;
+	align-items: baseline;
+	margin: 0 0 12px;
+}
+.ddt-dashboard-meters-label {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+.ddt-dashboard-meters-value {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+.ddt-dashboard-meters-label + .ddt-dashboard-meters-value:last-child { /* bez ukazatele (údaj chybí, chyba) – text pod názvem */
+	grid-column: 1 / -1;
+	text-align: left;
+	color: #646970;
+}
+.ddt-dashboard-meters-value .dashicons {
+	width: 16px;
+	height: 16px;
+	margin: 0 2px 0 4px;
+	font-size: 16px;
+	vertical-align: -3px;
+}
+.ddt-dashboard-meters-value .dashicons-warning {
+	color: #dba617;
+}
+.ddt-dashboard-meters-value .dashicons-dismiss {
+	color: #d63638;
+}
+.ddt-dashboard-meter {
+	grid-column: 1 / -1;
+	display: block;
+	height: 8px;
+	border-radius: 4px;
+	background: #c5d9ed;
+	overflow: hidden;
+}
+.ddt-dashboard-meter > span {
+	display: block;
+	height: 100%;
+	border-radius: 4px;
+	background: #2271b1;
+}
+.ddt-dashboard-meter-warning {
+	background: #f5e6ab;
+}
+.ddt-dashboard-meter-warning > span {
+	background: #dba617;
+}
+.ddt-dashboard-meter-danger {
+	background: #facfd2;
+}
+.ddt-dashboard-meter-danger > span {
+	background: #d63638;
+}
+.ddt-dashboard-meters-detail {
+	grid-column: 1 / -1;
+	color: #646970;
+	font-size: 12px;
+}
+/* [2026-11-27] údaj bez ukazatele (Cloudflare – provoz zóny: požadavky, data, hrozby) – název a hodnota na jednom řádku */
+.ddt-dashboard-meters > .ddt-dashboard-meters-stat > .ddt-dashboard-meters-value:last-child {
+	grid-column: auto;
+	text-align: right;
+	color: inherit;
+}
+@media (forced-colors: active) {
+	.ddt-dashboard-meter {
+		border: 1px solid CanvasText;
+	}
+	.ddt-dashboard-meter > span {
+		background: CanvasText;
+	}
+}
+
+/* [2026-11-27] seznam nasazení (Cloudflare) – menší písmo, ať se vejde i commit */
+.ddt-dashboard-deployments > li {
+	margin-bottom: 4px;
+	font-size: 12px;
+}
+.ddt-dashboard-deployments .dashicons-external {
+	font-size: 13px;
+	width: 13px;
+	height: 13px;
+	vertical-align: -2px;
+}

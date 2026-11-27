@@ -1,0 +1,218 @@
+/* [2026-11-26] Nástroje šablony (Nástroje → …, \FUNCTIONS\ADMIN_TOOL ve functions.php, stránky ve složce admin-tools/),
+   README „Nástroje v administraci“. Třídy: \CSS\CLASS_NAMES\ADMIN_TOOL, stavy kontrol (is-ok, is-error…) přidává
+   js/modules/admin-tool-static-site-deployment.mjs. Barvy z palety administrace WordPressu. Po změně přepočítat SRI
+   v \VARS\ADMIN_TOOL::STYLESHEET_INTEGRITY a zvýšit verzi v \VARS\ADMIN_TOOL::STYLESHEET (pravidlo 9). */
+
+.ddt-tool {
+	max-width: 72rem;
+}
+.ddt-tool p {
+	max-width: 52rem;
+	font-size: 14px;
+	line-height: 1.6;
+}
+.ddt-tool h2 {
+	font-size: 1.3em;
+	margin: 1.6em 0 .6em;
+}
+.ddt-tool code {
+	overflow-wrap: anywhere; /* dlouhé adresy a otisky nesmí roztáhnout tabulku */
+}
+
+/* nastavení na tomto webu */
+.ddt-tool-settings th {
+	width: 16em;
+	font-weight: 600;
+}
+.ddt-tool-settings th,
+.ddt-tool-settings td {
+	vertical-align: top;
+}
+
+/* tlačítko a stav běhu */
+.ddt-tool-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+}
+.ddt-tool-actions .spinner {
+	float: none;
+	margin: 0 6px 0 0;
+}
+
+/* výsledky kontrol */
+.ddt-tool-results {
+	margin-top: 1em;
+}
+.ddt-tool-results th,
+.ddt-tool-results td {
+	vertical-align: top;
+}
+.ddt-tool-results tbody th {
+	width: 17em;
+	font-weight: 600;
+}
+.ddt-tool-results td p {
+	margin: 0;
+}
+.ddt-tool-results td ul {
+	margin: .4em 0 0 1.4em;
+	list-style: disc;
+	color: #50575e;
+}
+.ddt-tool-results td li {
+	margin: .2em 0;
+}
+.ddt-tool-results tbody th > .dashicons {
+	margin-right: 6px;
+}
+.ddt-tool-results .is-ok th > .dashicons {
+	color: #00a32a;
+}
+.ddt-tool-results .is-warning th > .dashicons {
+	color: #dba617;
+}
+.ddt-tool-results .is-error th > .dashicons {
+	color: #d63638;
+}
+.ddt-tool-results .is-info th > .dashicons {
+	color: #2271b1;
+}
+.ddt-tool-results .is-skipped th > .dashicons,
+.ddt-tool-results .is-running th > .dashicons {
+	color: #8c8f94;
+}
+.ddt-tool-results .is-running th > .dashicons {
+	animation: ddt-tool-spin 1.2s linear infinite;
+}
+.ddt-tool-results td a .dashicons-external { /* ikona odkazu na jiný web (nová záložka) */
+	margin: 0 0 0 2px;
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	vertical-align: text-bottom;
+	color: inherit;
+}
+@keyframes ddt-tool-spin {
+	to {
+		transform: rotate( 360deg );
+	}
+}
+@media ( prefers-reduced-motion: reduce ) {
+	.ddt-tool-results .is-running th > .dashicons {
+		animation: none;
+	}
+}
+
+/* shrnutí */
+.ddt-tool [data-deployment-summary] ul {
+	margin: 0 0 .6em 1.4em;
+	list-style: disc;
+}
+
+/* [2026-11-26] v0.2: záložky mezi nástroji, výstup úloh (kontroly, záloha databáze, protokol náhledu), kontrola SRI */
+.wrap > .nav-tab-wrapper + .ddt-tool {
+	margin-top: 1em;
+}
+.ddt-tool h3 {
+	font-size: 1.1em;
+	margin: 1.4em 0 .4em;
+}
+.ddt-tool-actions label {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+.ddt-tool-output {
+	max-height: 32rem;
+	overflow: auto;
+	margin: 0 0 1em;
+	padding: 10px 12px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	font-size: 12px;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.ddt-tool-output.is-errors {
+	border-color: #d63638;
+}
+.ddt-tool-sri td {
+	vertical-align: top;
+}
+.ddt-tool-sri td:first-child {
+	white-space: nowrap;
+}
+.ddt-tool-sri .is-ok .dashicons,
+.ddt-tool-sri .is-same .dashicons {
+	color: #00a32a;
+}
+.ddt-tool-sri .is-mismatch .dashicons,
+.ddt-tool-sri .is-missing .dashicons {
+	color: #d63638;
+}
+.ddt-tool-sri .is-unresolved .dashicons {
+	color: #dba617;
+}
+.ddt-tool-results tbody th code {
+	font-weight: 400;
+}
+
+/* [2026-11-27] v0.3: Nastavení Cloudflare – tabulky voleb zóny a historie změn (admin-tools/nastaveni-cloudflare.php,
+   hodnoty a tlačítka vyplňuje js/modules/admin-tool-cloudflare-settings.mjs) */
+.ddt-tool-zone-settings th,
+.ddt-tool-zone-settings td {
+	vertical-align: top;
+}
+.ddt-tool-zone-settings tbody th {
+	width: 45%;
+	font-weight: 400;
+}
+.ddt-tool-zone-settings thead th:nth-child( 2 ) {
+	width: 25%;
+}
+.ddt-tool-description {
+	margin: .3em 0 0;
+	color: #50575e;
+	font-size: 13px;
+}
+.ddt-tool-zone-settings .ddt-tool-state:is( .is-on, .is-off, .is-attention ) strong::before { /* tečka se stavem (barva není jediný nositel informace – vedle je text); akce (vyčistit mezipaměť) stav nemá */
+	content: "";
+	display: inline-block;
+	width: .6em;
+	height: .6em;
+	margin-right: .4em;
+	border-radius: 50%;
+	background: #8c8f94;
+	vertical-align: .05em;
+}
+.ddt-tool-zone-settings .ddt-tool-state.is-on strong::before {
+	background: #00a32a;
+}
+.ddt-tool-zone-settings .ddt-tool-state.is-attention strong::before {
+	background: #d63638;
+}
+.ddt-tool-zone-settings .ddt-tool-state.is-attention strong {
+	color: #b32d2e;
+}
+.ddt-tool-zone-settings .ddt-tool-state.is-unknown {
+	color: #50575e;
+}
+.ddt-tool-control select {
+	max-width: 14em;
+	vertical-align: middle;
+}
+.ddt-tool-control .button {
+	vertical-align: middle;
+}
+.ddt-tool-log td {
+	vertical-align: top;
+}
+.ddt-tool-log td:first-child {
+	white-space: nowrap;
+}
+#ddt-nastaveni-cloudflare [data-zone-settings-zone] p {
+	margin: .4em 0;
+}
